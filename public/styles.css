@@ -2257,61 +2257,193 @@ footer {
     color: var(--accent-strong);
 }
 
-/* Responsive */
+/* ── Hamburger button ───────────────────────────────────────── */
+.nav-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 10px;
+    transition: background var(--transition-fast);
+    flex-shrink: 0;
+    z-index: 30;
+}
+.nav-hamburger:hover { background: rgba(201,162,39,0.12); }
+.nav-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text-main);
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    transform-origin: center;
+}
+.nav-hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Mobile slide-down menu ─────────────────────────────────── */
+.mobile-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    right: 0;
+    background: rgba(255, 252, 248, 0.98);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 12px 40px rgba(61, 53, 41, 0.12);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    z-index: 100;
+}
+
+.mobile-group { display: flex; flex-direction: column; }
+
+.mobile-group-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    text-align: left;
+}
+.mobile-group-toggle:hover { background: rgba(201,162,39,0.1); }
+
+.mobile-chevron { transition: transform 0.2s ease; font-style: normal; }
+.mobile-chevron.open { transform: rotate(180deg); }
+
+.mobile-submenu {
+    display: flex;
+    flex-direction: column;
+    padding: 0.25rem 0 0.25rem 1rem;
+}
+
+.mobile-item {
+    display: block;
+    padding: 0.65rem 1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    transition: all var(--transition-fast);
+}
+.mobile-item:hover { background: rgba(201,162,39,0.1); color: var(--accent-strong); }
+.mobile-item--top { font-weight: 500; }
+.mobile-item--donate {
+    background: linear-gradient(135deg, rgba(201,162,39,0.15), rgba(184,134,11,0.1));
+    color: var(--accent-strong);
+    font-weight: 600;
+    margin-top: 0.25rem;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
-    .nav-links {
-        gap: 0.2rem;
+    /* Nav: hide desktop links, show hamburger */
+    .nav-links   { display: none; }
+    .nav-hamburger { display: flex; }
+
+    /* Keep nav pill layout stable on mobile */
+    .nav {
+        position: relative;
         flex-wrap: wrap;
+        padding: 0.7rem 1rem;
     }
-    
-    .nav-link {
-        padding: 0.35rem 0.7rem;
-        font-size: 0.8rem;
+
+    /* Header sticks but doesn't overlap content */
+    header { top: 0.4rem; margin-bottom: 1rem; }
+
+    /* Shell padding reduced on mobile */
+    .shell { padding: 1rem 1rem 3rem; }
+
+    /* Hero */
+    .hero { padding: 2.5rem 1rem; }
+    .hero-title { font-size: clamp(1.6rem, 7vw, 2.4rem); }
+    .hero-sub   { font-size: 0.95rem; }
+    .hero-actions { flex-direction: column; align-items: stretch; }
+    .hero-actions .btn { width: 100%; justify-content: center; }
+
+    /* Quick-link cards: 2 columns on mobile */
+    .quick-cards { grid-template-columns: repeat(2, 1fr); }
+
+    /* Community photo strip: single column */
+    .photo-strip-grid {
+        grid-template-columns: 1fr;
+        height: auto;
     }
-    
-    .dropdown-menu {
-        position: fixed;
-        left: 50%;
-        transform: translateX(-50%) translateY(-10px);
-        min-width: 200px;
-        margin-top: 0.5rem;
-    }
-    
-    .dropdown:hover .dropdown-menu,
-    .dropdown-menu:hover {
-        transform: translateX(-50%) translateY(0);
-    }
-    
-    .timeline::before {
-        left: 30px;
-    }
-    
+    .photo-strip-item { height: 180px; }
+
+    /* Ministries grid: 1 column */
+    .ministries-grid { grid-template-columns: 1fr; }
+
+    /* Timeline: left-align everything */
+    .timeline::before { left: 30px; }
     .timeline-item {
         width: 100%;
         left: 0 !important;
         padding-left: 4rem !important;
-        padding-right: 1.5rem !important;
+        padding-right: 1rem !important;
         text-align: left !important;
         flex-direction: row !important;
     }
-    
     .timeline-item .timeline-icon {
         position: absolute;
         left: 0;
         margin: 0 !important;
     }
+
+    /* Gallery */
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+
+    /* Page header */
+    .page-header { padding: 2rem 1rem 1.5rem; }
+
+    /* Content sections */
+    .content-section { padding: 1.5rem 1rem; }
+
+    /* Footer */
+    .footer-inner {
+        flex-direction: column;
+        gap: 2rem;
+        text-align: center;
+    }
+    .footer-links { justify-content: center; flex-wrap: wrap; }
+
+    /* Buttons */
+    .btn { padding: 0.7rem 1.4rem; }
 }
-    
-    .hero {
-        padding: 3rem 1.5rem;
-    }
-    
-    .quick-links {
-        grid-template-columns: 1fr;
-    }
-    
-    .btn {
-        width: 100%;
-        justify-content: center;
-    }
+
+@media (max-width: 480px) {
+    /* Single column quick cards on very small screens */
+    .quick-cards { grid-template-columns: 1fr; }
+
+    /* Gallery: single column on tiny screens */
+    .gallery-grid { grid-template-columns: 1fr; }
+
+    /* Nav title shorter */
+    .nav-subtitle { display: none; }
+
+    /* About icons: single column */
+    .about-icons-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* Events */
+    .event-card { padding: 1rem; }
 }
