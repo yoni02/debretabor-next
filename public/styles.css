@@ -2290,22 +2290,29 @@ footer {
 .nav-hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 /* ── Mobile slide-down menu ─────────────────────────────────── */
+@keyframes menuSlideDown {
+    from { opacity: 0; transform: translateY(-8px) scaleY(0.96); }
+    to   { opacity: 1; transform: translateY(0)    scaleY(1); }
+}
+
 .mobile-menu {
     position: absolute;
-    top: calc(100% + 0.5rem);
+    top: calc(100% + 0.4rem);
     left: 0;
     right: 0;
-    background: rgba(255, 252, 248, 0.98);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(255, 252, 248, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-soft);
-    border-radius: var(--radius-xl);
-    box-shadow: 0 12px 40px rgba(61, 53, 41, 0.12);
-    padding: 1rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(61, 53, 41, 0.1);
+    padding: 0.6rem 0.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.1rem;
     z-index: 100;
+    transform-origin: top center;
+    animation: menuSlideDown 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 .mobile-group { display: flex; flex-direction: column; }
@@ -2315,12 +2322,12 @@ footer {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 0.75rem 1rem;
+    padding: 0.6rem 0.85rem;
     background: transparent;
     border: none;
     border-radius: 12px;
     font-family: inherit;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     font-weight: 600;
     color: var(--text-main);
     cursor: pointer;
@@ -2329,47 +2336,64 @@ footer {
 }
 .mobile-group-toggle:hover { background: rgba(201,162,39,0.1); }
 
-.mobile-chevron { transition: transform 0.2s ease; font-style: normal; }
-.mobile-chevron.open { transform: rotate(180deg); }
+.mobile-chevron {
+    transition: transform 0.2s ease;
+    font-style: normal;
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+.mobile-chevron.open { transform: rotate(180deg); opacity: 1; }
 
 .mobile-submenu {
     display: flex;
     flex-direction: column;
-    padding: 0.25rem 0 0.25rem 1rem;
+    padding: 0.1rem 0 0.1rem 0.75rem;
+    animation: menuSlideDown 0.18s ease both;
 }
 
 .mobile-item {
     display: block;
-    padding: 0.65rem 1rem;
+    padding: 0.55rem 0.85rem;
     border-radius: 10px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
     transition: all var(--transition-fast);
 }
 .mobile-item:hover { background: rgba(201,162,39,0.1); color: var(--accent-strong); }
-.mobile-item--top { font-weight: 500; }
+.mobile-item--top { font-weight: 500; color: var(--text-main); }
 .mobile-item--donate {
     background: linear-gradient(135deg, rgba(201,162,39,0.15), rgba(184,134,11,0.1));
     color: var(--accent-strong);
     font-weight: 600;
-    margin-top: 0.25rem;
+    margin-top: 0.2rem;
+    text-align: center;
 }
 
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
     /* Nav: hide desktop links, show hamburger */
-    .nav-links   { display: none; }
+    .nav-links     { display: none; }
     .nav-hamburger { display: flex; }
 
-    /* Keep nav pill layout stable on mobile */
+    /* Single-row pill — logo left, hamburger right, never wraps */
     .nav {
         position: relative;
-        flex-wrap: wrap;
-        padding: 0.7rem 1rem;
+        flex-wrap: nowrap;
+        padding: 0.55rem 0.75rem;
+        gap: 0;
     }
 
+    /* Shrink logo on mobile so title fits */
+    .nav-logo {
+        width: 36px;
+        height: 36px;
+    }
+    .nav-left { gap: 0.5rem; }
+    .nav-title { font-size: 0.78rem; }
+    .nav-subtitle { font-size: 0.65rem; }
+
     /* Header sticks but doesn't overlap content */
-    header { top: 0.4rem; margin-bottom: 1rem; }
+    header { top: 0.3rem; margin-bottom: 0.75rem; }
 
     /* Shell padding reduced on mobile */
     .shell { padding: 1rem 1rem 3rem; }
@@ -2438,8 +2462,10 @@ footer {
     /* Gallery: single column on tiny screens */
     .gallery-grid { grid-template-columns: 1fr; }
 
-    /* Nav title shorter */
+    /* Hide subtitle so nav stays on one line on smallest phones */
     .nav-subtitle { display: none; }
+    .nav-title { font-size: 0.72rem; }
+    .nav-logo { width: 32px; height: 32px; }
 
     /* About icons: single column */
     .about-icons-grid { grid-template-columns: repeat(2, 1fr); }
