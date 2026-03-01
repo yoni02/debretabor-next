@@ -62,7 +62,7 @@ export default function EventsPageClient({ events }: Props) {
               <div className="epc-title">{ev.title}</div>
               <div className="epc-date"><i className="fas fa-calendar" /> {formatDate(ev.date)}</div>
               <div className="epc-time"><i className="fas fa-clock" /> {ev.time}</div>
-              {ev.desc && <div className="epc-desc">{ev.desc}</div>}
+              {ev.description && <div className="epc-desc">{ev.description}</div>}
             </div>
           </div>
         ))}

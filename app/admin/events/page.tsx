@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import type { ChurchEvent, EventType } from '@/lib/eventData';
 
-const EMPTY: Omit<ChurchEvent, '_id'> = { title: '', date: '', time: '6:00 AM', type: 'liturgy', desc: '' };
+const EMPTY: Omit<ChurchEvent, '_id'> = { title: '', date: '', time: '6:00 AM', type: 'liturgy', description: '' };
 
 const inputStyle: React.CSSProperties = {
   width: '100%', padding: '0.65rem 0.9rem', borderRadius: 10,
@@ -32,7 +32,7 @@ export default function AdminEventsPage() {
 
   function startEdit(ev: ChurchEvent) {
     setEditId(ev._id ?? null);
-    setForm({ title: ev.title, date: ev.date, time: ev.time, type: ev.type, desc: ev.desc });
+    setForm({ title: ev.title, date: ev.date, time: ev.time, type: ev.type, description: ev.description });
   }
 
   function cancelEdit() { setEditId(null); setForm(EMPTY); }
@@ -91,7 +91,7 @@ export default function AdminEventsPage() {
         </div>
         <div style={{ gridColumn: '1 / -1' }}>
           <label style={labelStyle}>Description</label>
-          <textarea style={{ ...inputStyle, minHeight: 80, resize: 'vertical' }} value={form.desc} onChange={e => setForm(f => ({ ...f, desc: e.target.value }))} />
+          <textarea style={{ ...inputStyle, minHeight: 80, resize: 'vertical' }} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
         </div>
         <div style={{ gridColumn: '1 / -1', display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
           <button type="submit" disabled={loading} style={{ padding: '0.7rem 2rem', borderRadius: 999, background: 'linear-gradient(135deg, #c9a227, #b8860b)', color: '#faf8f5', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '0.9rem' }}>
