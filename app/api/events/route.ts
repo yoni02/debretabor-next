@@ -1,21 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { connectDB } from '@/lib/mongodb';
-import Event from '@/lib/models/Event';
+import { createSupabaseServer, createSupabaseAdmin } from '@/lib/supabase-server';
 
 export async function GET() {
-  await connectDB();
-  const events = await Event.find({}).sort({ date: 1 }).lean();
-  return NextResponse.json(events);
+  const db = createSupabaseAdmin();
+  const { data, error } = await db.from('events').select('*').order('date', { ascending: true });
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json(data);
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
+  const auth = createSupabaseServer();
+  const { data: { session } } = await auth.auth.getSession();
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  await connectDB();
   const body = await req.json();
-  const event = await Event.create(body);
-  return NextResponse.json(event, { status: 201 });
+  const { data, error } = await createSupabaseAdmin()
+    .from('events').insert(body).select().single();
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json(data, { status: 201 });
 }

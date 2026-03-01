@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import AdminSignOut from '@/components/AdminSignOut';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,11 +10,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Image src="/church-profile.png" alt="Church" width={40} height={40} style={{ borderRadius: '50%', border: '2px solid #C8941A' }} />
           <span style={{ color: '#C8941A', fontWeight: 700, fontSize: '0.95rem', letterSpacing: '0.04em' }}>Admin Panel</span>
         </div>
-        <div style={{ display: 'flex', gap: '1rem', marginLeft: 'auto' }}>
+        <div style={{ display: 'flex', gap: '1rem', marginLeft: 'auto', alignItems: 'center' }}>
           <Link href="/admin" style={{ color: '#F5EDD8', fontSize: '0.85rem', padding: '0.4rem 0.8rem', borderRadius: 8, textDecoration: 'none' }}>Dashboard</Link>
           <Link href="/admin/events" style={{ color: '#F5EDD8', fontSize: '0.85rem', padding: '0.4rem 0.8rem', borderRadius: 8, textDecoration: 'none' }}>Events</Link>
           <Link href="/admin/gallery" style={{ color: '#F5EDD8', fontSize: '0.85rem', padding: '0.4rem 0.8rem', borderRadius: 8, textDecoration: 'none' }}>Gallery</Link>
           <Link href="/" style={{ color: '#C8941A', fontSize: '0.85rem', padding: '0.4rem 0.8rem', borderRadius: 8, textDecoration: 'none', border: '1px solid #C8941A' }}>← View Site</Link>
+          <AdminSignOut />
         </div>
       </nav>
       <main style={{ maxWidth: 1080, margin: '0 auto', padding: '2rem 1.5rem' }}>

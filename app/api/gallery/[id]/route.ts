@@ -1,26 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { connectDB } from '@/lib/mongodb';
-import GalleryPhoto from '@/lib/models/GalleryPhoto';
-import { v2 as cloudinary } from 'cloudinary';
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key:    process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+import { createSupabaseServer, createSupabaseAdmin } from '@/lib/supabase-server';
 
 export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
-  const session = await getServerSession(authOptions);
+  const auth = createSupabaseServer();
+  const { data: { session } } = await auth.auth.getSession();
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  await connectDB();
-  const photo = await GalleryPhoto.findById(params.id);
-  if (!photo) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  const admin = createSupabaseAdmin();
 
-  await cloudinary.uploader.destroy(photo.publicId);
-  await photo.deleteOne();
+  const { data: photo, error: fetchErr } = await admin
+    .from('gallery_photos').select('storage_path').eq('id', params.id).single();
 
+  if (fetchErr || !photo) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
+  await admin.storage.from('church-images').remove([photo.storage_path]);
+
+  const { error } = await admin.from('gallery_photos').delete().eq('id', params.id);
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });
 }
