@@ -22,19 +22,26 @@ export default function GalleryGrid({ photos }: Props) {
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
 
-  // Scroll lock: set overflow hidden on both html and body.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // We deliberately avoid position:fixed on the body because on iOS Safari
-  // it shifts the document origin and causes position:fixed children (the
-  // lightbox) to be rendered at the wrong vertical position.
+  // iOS Safari: position:fixed on the body is the only reliable way to
+  // prevent the page from scrolling AND ensure the fixed lightbox is anchored
+  // to the visual viewport (not the scroll offset). We save/restore scrollY
+  // so the page doesn't jump back to the top when the lightbox closes.
+  const savedScrollY = useRef(0);
+
   const lockScroll = () => {
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
+    savedScrollY.current = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${savedScrollY.current}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
   };
 
   const unlockScroll = () => {
-    document.documentElement.style.overflow = '';
-    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    window.scrollTo(0, savedScrollY.current);
   };
 
   const openLightbox = (idx: number) => {
