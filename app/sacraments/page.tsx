@@ -37,7 +37,7 @@ const SACRAMENTS = [
     number: 3,
     name: 'Holy Eucharist',
     ge_ez: 'Qidus Qurban — ቅዱስ ቁርባን',
-    icon: 'fa-bread-slice',
+    icon: 'fa-place-of-worship',
     color: 'eth-crimson',
     description:
       'The Eucharist is the center of the Divine Liturgy. The bread and wine become the true Body and Blood of our Lord Jesus Christ. Receiving Communion unites the faithful with Christ and one another in the one Body of the Church.',
@@ -75,7 +75,6 @@ const SACRAMENTS = [
       'Ordination requires extensive theological formation and study of the scriptures and canons.',
       'A candidate must be living a holy and blameless life, approved by the Church.',
       'Marriage (if desired) must take place before ordination to the priesthood.',
-      'Speak with your priest or bishop if you believe God is calling you to holy orders.',
     ],
   },
   {
@@ -111,10 +110,10 @@ const SACRAMENTS = [
 ];
 
 const COLOR_MAP: Record<string, string> = {
-  'eth-lapis':     '#1A3478',
+  'eth-lapis': '#1A3478',
   'eth-malachite': '#1C5526',
-  'eth-crimson':   '#7A1818',
-  'eth-ochre':     '#7A4A08',
+  'eth-crimson': '#7A1818',
+  'eth-ochre': '#7A4A08',
 };
 
 export default function SacramentsPage() {
