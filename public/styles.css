@@ -2398,6 +2398,162 @@ header {
     font-style: italic;
 }
 
+/* ── Sacraments page ────────────────────────────────────────── */
+.sacraments-intro {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sacraments-intro p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+}
+
+.sacraments-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    margin-bottom: 2.5rem;
+}
+
+.sacrament-card {
+    background: rgba(255, 252, 248, 0.95);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(61, 53, 41, 0.06);
+    transition: box-shadow var(--transition-med);
+}
+
+.sacrament-card:hover {
+    box-shadow: 0 8px 32px rgba(61, 53, 41, 0.1);
+}
+
+.sacrament-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.sacrament-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: var(--eth-ivory);
+    flex-shrink: 0;
+    box-shadow:
+        inset 0 0 0 2px rgba(210, 165, 60, 0.28),
+        0 0 0 2px var(--eth-gold-rim),
+        0 0 0 5px var(--eth-ink),
+        0 0 0 7px var(--eth-gold-rim),
+        0 6px 20px rgba(19, 8, 4, 0.4);
+}
+
+.sacrament-title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.sacrament-number {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--eth-gold-rim);
+    text-transform: uppercase;
+}
+
+.sacrament-name {
+    font-size: 1.5rem;
+    color: var(--accent-strong);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.sacrament-ge_ez {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-style: italic;
+    opacity: 0.85;
+}
+
+.sacrament-description {
+    font-size: 0.97rem;
+    line-height: 1.75;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.sacrament-prepare h3 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent-strong);
+    letter-spacing: 0.04em;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sacrament-prepare h3 i {
+    color: var(--eth-gold-rim);
+}
+
+.sacrament-prepare ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sacrament-prepare ul li {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    padding-left: 1.25rem;
+    position: relative;
+}
+
+.sacrament-prepare ul li::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    color: var(--eth-gold-rim);
+    font-size: 0.6rem;
+    top: 0.35em;
+}
+
+.sacraments-closing {
+    text-align: center;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sacraments-closing p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+@media (max-width: 480px) {
+    .sacrament-card { padding: 1.25rem; }
+    .sacrament-icon { width: 48px; height: 48px; font-size: 1.1rem; }
+    .sacrament-name { font-size: 1.25rem; }
+}
+
 /* Find Us section (home page) */
 .find-us-section {
     text-align: center;
