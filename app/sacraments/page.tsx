@@ -23,7 +23,7 @@ const SACRAMENTS = [
     number: 2,
     name: 'Chrismation',
     ge_ez: 'Qidus Meron — ቅዱስ ሜሮን',
-    icon: 'fa-oil-can',
+    icon: 'fa-bottle-droplet',
     color: 'eth-malachite',
     description:
       'Received immediately after Baptism, Chrismation is the anointing of the newly baptized with consecrated holy oil (Meron). It bestows the gift of the Holy Spirit, completing initiation into the Church and sealing the believer as a temple of God.',
