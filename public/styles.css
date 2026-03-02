@@ -671,8 +671,9 @@ header {
 }
 
 .mission-verse p {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-style: italic;
+    font-weight: 600;
     color: var(--text-main);
     line-height: 1.8;
     margin-bottom: 0.75rem;
