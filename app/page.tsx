@@ -104,36 +104,6 @@ export default function HomePage() {
 
       <div className="section-divider" aria-hidden="true">✦</div>
 
-      {/* Find Us */}
-      <section className="find-us-section">
-        <h2 className="find-us-title">Find Us</h2>
-        <p className="find-us-subtitle">
-          231 Taft St, Durham, NC 27703 &mdash;{' '}
-          <a
-            href="https://www.google.com/maps/search/?api=1&query=Debre+Tabor+Holy+God+Father+Ethiopian+Orthodox+Tewahedo+Church+231+Taft+St+Durham+NC+27703"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="find-us-link"
-          >
-            Open in Google Maps <i className="fas fa-external-link-alt"></i>
-          </a>
-        </p>
-        <div className="map-embed-wrapper">
-          <iframe
-            title="Debre Tabor Holy God Father EOTC — 231 Taft St, Durham, NC 27703"
-            src="https://maps.google.com/maps?q=Debre+Tabor+Holy+God+Father+Ethiopian+Orthodox+Tewahedo+Church,+231+Taft+St,+Durham,+NC+27703&output=embed"
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </div>
-      </section>
-
-      <div className="section-divider" aria-hidden="true">✦</div>
-
       {/* Sunday Timeline */}
       <section className="timeline-section">
         <h2 className="timeline-title">Sunday Schedule</h2>
