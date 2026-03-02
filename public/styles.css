@@ -659,29 +659,31 @@ header {
 }
 
 .mission-verse {
-    margin: 1.75rem auto 0;
-    max-width: 520px;
-    padding: 1.25rem 1.5rem;
-    border-left: 4px solid var(--eth-gold-rim);
-    background: linear-gradient(135deg, rgba(200, 148, 26, 0.07), rgba(26, 52, 120, 0.04));
-    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    margin: 2rem auto 0;
+    max-width: 560px;
+    padding: 1.75rem 2rem;
+    border: 1px solid rgba(200, 148, 26, 0.35);
+    border-left: 5px solid var(--eth-gold-rim);
+    background: linear-gradient(135deg, rgba(200, 148, 26, 0.11), rgba(26, 52, 120, 0.07));
+    border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
     text-align: left;
+    box-shadow: 0 4px 20px rgba(200, 148, 26, 0.1);
 }
 
 .mission-verse p {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-style: italic;
     color: var(--text-main);
-    line-height: 1.7;
-    margin-bottom: 0.5rem;
+    line-height: 1.8;
+    margin-bottom: 0.75rem;
 }
 
 .mission-verse cite {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--accent-strong);
     font-style: normal;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-weight: 700;
+    letter-spacing: 0.05em;
 }
 
 /* Timeline */
