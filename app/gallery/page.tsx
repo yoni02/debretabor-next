@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: 'Photo Gallery' };
 const STATIC_PHOTOS = [
   { src: '/screenshot-s12.png', caption: 'The Holy Trinity', alt: 'Ethiopian Orthodox icon of the Holy Trinity' },
   { src: '/screenshot-s11.png', caption: 'Virgin Mary & Christ Child', alt: 'Ethiopian Orthodox icon of the Theotokos with Christ Child' },
-  { src: '/screenshot-s10.png', caption: 'Ethiopian Saint Icon', alt: 'Ethiopian Orthodox saint icon with golden halo' },
+  { src: '/screenshot-s10.png', caption: 'Ancient of Days God the Father', alt: 'Depiction of Ancient of Days from Daniel 7:9-10' },
   { src: '/screenshot-s7.png', caption: 'Congregation Gathering', alt: 'Congregation gathered outside the church' },
   { src: '/screenshot-s2.png', caption: 'Our Church', alt: 'Debre Tabor Church building at dusk' },
   { src: '/screenshot-s5.png', caption: 'Sacred Procession', alt: 'Liturgical procession with priests carrying an icon' },

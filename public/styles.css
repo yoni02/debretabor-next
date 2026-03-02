@@ -1960,7 +1960,15 @@ header {
 /* Lightbox */
 .lightbox {
     position: fixed;
-    inset: 0;
+    /* Explicit edges instead of inset shorthand — more reliable on iOS Safari */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Use dvh (dynamic viewport height) so iOS URL bar is accounted for */
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -1976,8 +1984,11 @@ header {
 }
 
 .lightbox-backdrop {
-    position: absolute;
-    inset: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: rgba(13, 6, 2, 0.92);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
@@ -1989,14 +2000,18 @@ header {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    width: 100%;
     max-width: 90vw;
     max-height: 90vh;
-    gap: 1rem;
+    max-height: 90dvh;
+    gap: 0.75rem;
 }
 
 .lightbox-img {
     max-width: 88vw;
-    max-height: 78vh;
+    max-height: 75vh;
+    max-height: 75dvh;
     border-radius: var(--radius-lg);
     object-fit: contain;
     display: block;
@@ -2101,6 +2116,7 @@ header {
         /* Narrow enough to clear the prev/next buttons on small phones */
         max-width: calc(100vw - 96px);
         max-height: 68vh;
+        max-height: 68dvh;
     }
     .lightbox-caption {
         font-size: 0.85rem;
