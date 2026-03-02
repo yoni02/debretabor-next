@@ -68,10 +68,9 @@ export default function Nav() {
           <div className="dropdown">
             <Link href="/" className={`nav-link has-dropdown${isActive(pathname, '/') && pathname === '/' ? ' nav-link--active' : ''}`}>Home</Link>
             <div className="dropdown-menu">
-              <Link href="/about"       className={`dropdown-item${isActive(pathname, '/about')       ? ' dropdown-item--active' : ''}`}>About</Link>
-              <Link href="/sacraments"  className={`dropdown-item${isActive(pathname, '/sacraments')  ? ' dropdown-item--active' : ''}`}>The 7 Sacraments</Link>
-              <Link href="/gallery"     className={`dropdown-item${isActive(pathname, '/gallery')     ? ' dropdown-item--active' : ''}`}>Gallery</Link>
-              <Link href="/faq"         className={`dropdown-item${isActive(pathname, '/faq')         ? ' dropdown-item--active' : ''}`}>FAQ</Link>
+              <Link href="/about"   className={`dropdown-item${isActive(pathname, '/about')   ? ' dropdown-item--active' : ''}`}>About</Link>
+              <Link href="/gallery" className={`dropdown-item${isActive(pathname, '/gallery') ? ' dropdown-item--active' : ''}`}>Gallery</Link>
+              <Link href="/faq"     className={`dropdown-item${isActive(pathname, '/faq')     ? ' dropdown-item--active' : ''}`}>FAQ</Link>
             </div>
           </div>
 
@@ -93,6 +92,13 @@ export default function Nav() {
             </div>
           </div>
 
+          <div className="dropdown">
+            <Link href="/sacraments" className={`nav-link has-dropdown${isActive(pathname, '/sacraments') ? ' nav-link--active' : ''}`}>Faith</Link>
+            <div className="dropdown-menu">
+              <Link href="/sacraments" className={`dropdown-item${isActive(pathname, '/sacraments') ? ' dropdown-item--active' : ''}`}>The 7 Sacraments</Link>
+            </div>
+          </div>
+
           <Link href="/services"  className={`nav-link${isActive(pathname, '/services')  ? ' nav-link--active' : ''}`}>Services</Link>
           <Link href="/contact"   className={`nav-link${isActive(pathname, '/contact')   ? ' nav-link--active' : ''}`}>Contact</Link>
           <Link href="/donations" className={`nav-link${isActive(pathname, '/donations') ? ' nav-link--active' : ''}`}>Donations</Link>
@@ -111,10 +117,9 @@ export default function Nav() {
               </div>
               {openDropdown === 'home' && (
                 <div className="mobile-submenu">
-                  <Link href="/about"      className="mobile-item" onClick={() => setMenuOpen(false)}>About</Link>
-                  <Link href="/sacraments" className="mobile-item" onClick={() => setMenuOpen(false)}>The 7 Sacraments</Link>
-                  <Link href="/gallery"    className="mobile-item" onClick={() => setMenuOpen(false)}>Gallery</Link>
-                  <Link href="/faq"        className="mobile-item" onClick={() => setMenuOpen(false)}>FAQ</Link>
+                  <Link href="/about"   className="mobile-item" onClick={() => setMenuOpen(false)}>About</Link>
+                  <Link href="/gallery" className="mobile-item" onClick={() => setMenuOpen(false)}>Gallery</Link>
+                  <Link href="/faq"     className="mobile-item" onClick={() => setMenuOpen(false)}>FAQ</Link>
                 </div>
               )}
             </div>
@@ -147,6 +152,20 @@ export default function Nav() {
                 <div className="mobile-submenu">
                   <Link href="/engage/events"   className="mobile-item" onClick={() => setMenuOpen(false)}>Events</Link>
                   <Link href="/engage/calendar" className="mobile-item" onClick={() => setMenuOpen(false)}>Calendar</Link>
+                </div>
+              )}
+            </div>
+
+            <div className="mobile-group">
+              <div className="mobile-group-toggle">
+                <Link href="/sacraments" className="mobile-group-link" onClick={() => setMenuOpen(false)}>Faith</Link>
+                <button className="mobile-chevron-btn" onClick={() => toggleDropdown('faith')} aria-label="Toggle Faith submenu">
+                  <span className={`mobile-chevron${openDropdown === 'faith' ? ' open' : ''}`}>▾</span>
+                </button>
+              </div>
+              {openDropdown === 'faith' && (
+                <div className="mobile-submenu">
+                  <Link href="/sacraments" className="mobile-item" onClick={() => setMenuOpen(false)}>The 7 Sacraments</Link>
                 </div>
               )}
             </div>
