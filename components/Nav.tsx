@@ -102,9 +102,12 @@ export default function Nav() {
           <div className="mobile-menu">
             {/* Home group */}
             <div className="mobile-group">
-              <button className="mobile-group-toggle" onClick={() => toggleDropdown('home')}>
-                Home <span className={`mobile-chevron${openDropdown === 'home' ? ' open' : ''}`}>▾</span>
-              </button>
+              <div className="mobile-group-toggle">
+                <Link href="/" className="mobile-group-link" onClick={() => setMenuOpen(false)}>Home</Link>
+                <button className="mobile-chevron-btn" onClick={() => toggleDropdown('home')} aria-label="Toggle Home submenu">
+                  <span className={`mobile-chevron${openDropdown === 'home' ? ' open' : ''}`}>▾</span>
+                </button>
+              </div>
               {openDropdown === 'home' && (
                 <div className="mobile-submenu">
                   <Link href="/about"   className="mobile-item" onClick={() => setMenuOpen(false)}>About</Link>
@@ -115,9 +118,12 @@ export default function Nav() {
             </div>
 
             <div className="mobile-group">
-              <button className="mobile-group-toggle" onClick={() => toggleDropdown('ministries')}>
-                Ministries <span className={`mobile-chevron${openDropdown === 'ministries' ? ' open' : ''}`}>▾</span>
-              </button>
+              <div className="mobile-group-toggle">
+                <Link href="/ministries" className="mobile-group-link" onClick={() => setMenuOpen(false)}>Ministries</Link>
+                <button className="mobile-chevron-btn" onClick={() => toggleDropdown('ministries')} aria-label="Toggle Ministries submenu">
+                  <span className={`mobile-chevron${openDropdown === 'ministries' ? ' open' : ''}`}>▾</span>
+                </button>
+              </div>
               {openDropdown === 'ministries' && (
                 <div className="mobile-submenu">
                   <Link href="/ministries"               className="mobile-item" onClick={() => setMenuOpen(false)}>All Ministries</Link>
@@ -129,9 +135,12 @@ export default function Nav() {
             </div>
 
             <div className="mobile-group">
-              <button className="mobile-group-toggle" onClick={() => toggleDropdown('engage')}>
-                Engage <span className={`mobile-chevron${openDropdown === 'engage' ? ' open' : ''}`}>▾</span>
-              </button>
+              <div className="mobile-group-toggle">
+                <Link href="/engage/events" className="mobile-group-link" onClick={() => setMenuOpen(false)}>Engage</Link>
+                <button className="mobile-chevron-btn" onClick={() => toggleDropdown('engage')} aria-label="Toggle Engage submenu">
+                  <span className={`mobile-chevron${openDropdown === 'engage' ? ' open' : ''}`}>▾</span>
+                </button>
+              </div>
               {openDropdown === 'engage' && (
                 <div className="mobile-submenu">
                   <Link href="/engage/events"   className="mobile-item" onClick={() => setMenuOpen(false)}>Events</Link>

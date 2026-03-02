@@ -2370,19 +2370,33 @@ footer {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 0.6rem 0.85rem;
-    background: transparent;
-    border: none;
     border-radius: 12px;
-    font-family: inherit;
+    transition: background var(--transition-fast);
+}
+.mobile-group-toggle:hover { background: rgba(201,162,39,0.1); }
+
+.mobile-group-link {
+    flex: 1;
+    padding: 0.6rem 0.85rem;
     font-size: 0.88rem;
     font-weight: 600;
     color: var(--text-main);
-    cursor: pointer;
-    transition: background var(--transition-fast);
-    text-align: left;
 }
-.mobile-group-toggle:hover { background: rgba(201,162,39,0.1); }
+.mobile-group-link:hover { color: var(--accent-strong); }
+
+.mobile-chevron-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--text-main);
+    flex-shrink: 0;
+}
 
 .mobile-chevron {
     transition: transform 0.2s ease;
