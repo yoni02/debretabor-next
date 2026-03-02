@@ -42,8 +42,10 @@ body {
     background: linear-gradient(160deg, #f8f4ec 0%, #ebe5db 50%, #e5ddd0 100%);
     color: var(--text-main);
     -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%; /* prevent iOS font-size inflation on rotation */
     scroll-behavior: smooth;
     min-height: 100vh;
+    min-height: 100svh; /* iOS Safari: use small viewport height so URL bar doesn't cause overflow */
 }
 
 h1, h2, h3, .hero-title, .mission-title, .timeline-title, .icons-title, .page-header h1 {
@@ -81,6 +83,12 @@ a {
 body:not(.page-loaded) main {
     opacity: 0;
     transform: translateY(10px);
+    /* Safety fallback: if JS is slow or blocked (e.g. on older iPhones),
+       reveal content after 1.5s so the page never stays blank */
+    animation: pageLoadFallback 0s 1.5s forwards;
+}
+@keyframes pageLoadFallback {
+    to { opacity: 1; transform: translateY(0); }
 }
 body.page-loaded main {
     opacity: 1;
@@ -195,6 +203,7 @@ img {
 
 .page {
     min-height: 100vh;
+    min-height: 100svh;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -209,6 +218,7 @@ img {
 
 /* Navigation */
 header {
+    position: -webkit-sticky; /* iOS 12 and below */
     position: sticky;
     top: 0.6rem;
     z-index: 20;

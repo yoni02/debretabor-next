@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 
 interface Photo {
@@ -18,17 +18,41 @@ export default function GalleryGrid({ photos }: Props) {
   const [current, setCurrent] = useState(0);
   const [loaded, setLoaded] = useState(false);
 
+  // Touch swipe tracking
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+
+  // iOS-safe scroll lock: save scroll position and use position:fixed
+  const savedScrollY = useRef(0);
+
+  const lockScroll = () => {
+    savedScrollY.current = window.scrollY;
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${savedScrollY.current}px`;
+    document.body.style.width = '100%';
+  };
+
+  const unlockScroll = () => {
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, savedScrollY.current);
+  };
+
   const openLightbox = (idx: number) => {
     setCurrent(idx);
     setLightboxOpen(true);
     setLoaded(false);
-    document.body.style.overflow = 'hidden';
+    lockScroll();
   };
 
   const closeLightbox = useCallback(() => {
     setLightboxOpen(false);
-    document.body.style.overflow = '';
     setLoaded(false);
+    unlockScroll();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const prev = useCallback(() => {
@@ -41,6 +65,7 @@ export default function GalleryGrid({ photos }: Props) {
     setCurrent(c => (c + 1) % photos.length);
   }, [photos.length]);
 
+  // Keyboard navigation
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (!lightboxOpen) return;
@@ -52,6 +77,26 @@ export default function GalleryGrid({ photos }: Props) {
     return () => window.removeEventListener('keydown', onKey);
   }, [lightboxOpen, closeLightbox, prev, next]);
 
+  // Clean up scroll lock if component unmounts while lightbox is open
+  useEffect(() => {
+    return () => { unlockScroll(); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dy = e.changedTouches[0].clientY - touchStartY.current;
+    // Only trigger if horizontal swipe is dominant and long enough
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+      dx < 0 ? next() : prev();
+    }
+  }
+
   return (
     <>
       <div className="gallery-grid">
@@ -62,7 +107,13 @@ export default function GalleryGrid({ photos }: Props) {
             data-caption={photo.caption}
             onClick={() => openLightbox(i)}
           >
-            <Image src={photo.src} alt={photo.alt} fill style={{ objectFit: 'cover' }} sizes="(max-width: 640px) 100vw, (max-width: 1080px) 50vw, 33vw" />
+            <Image
+              src={photo.src}
+              alt={photo.alt}
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="(max-width: 640px) 100vw, (max-width: 1080px) 50vw, 33vw"
+            />
             <div className="gallery-caption">{photo.caption}</div>
             <div className="gallery-zoom-hint"><i className="fas fa-expand"></i></div>
           </div>
@@ -75,10 +126,18 @@ export default function GalleryGrid({ photos }: Props) {
         role="dialog"
         aria-modal="true"
         aria-label="Image viewer"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
-        <button className="lightbox-close" aria-label="Close" onClick={closeLightbox}><i className="fas fa-times"></i></button>
-        <button className="lightbox-nav lightbox-prev" aria-label="Previous image" onClick={prev}><i className="fas fa-chevron-left"></i></button>
-        <button className="lightbox-nav lightbox-next" aria-label="Next image" onClick={next}><i className="fas fa-chevron-right"></i></button>
+        <button className="lightbox-close" aria-label="Close" onClick={closeLightbox}>
+          <i className="fas fa-times"></i>
+        </button>
+        <button className="lightbox-nav lightbox-prev" aria-label="Previous image" onClick={prev}>
+          <i className="fas fa-chevron-left"></i>
+        </button>
+        <button className="lightbox-nav lightbox-next" aria-label="Next image" onClick={next}>
+          <i className="fas fa-chevron-right"></i>
+        </button>
         <div className="lightbox-inner">
           {lightboxOpen && (
             // eslint-disable-next-line @next/next/no-img-element
