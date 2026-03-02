@@ -68,7 +68,6 @@ export default function Nav() {
           <div className="dropdown">
             <Link href="/" className={`nav-link has-dropdown${isActive(pathname, '/') && pathname === '/' ? ' nav-link--active' : ''}`}>Home</Link>
             <div className="dropdown-menu">
-              <Link href="/"       className={`dropdown-item${pathname === '/' ? ' dropdown-item--active' : ''}`}>Home</Link>
               <Link href="/about"  className={`dropdown-item${isActive(pathname, '/about')   ? ' dropdown-item--active' : ''}`}>About</Link>
               <Link href="/gallery" className={`dropdown-item${isActive(pathname, '/gallery') ? ' dropdown-item--active' : ''}`}>Gallery</Link>
               <Link href="/faq"    className={`dropdown-item${isActive(pathname, '/faq')     ? ' dropdown-item--active' : ''}`}>FAQ</Link>
@@ -108,7 +107,6 @@ export default function Nav() {
               </button>
               {openDropdown === 'home' && (
                 <div className="mobile-submenu">
-                  <Link href="/"        className="mobile-item" onClick={() => setMenuOpen(false)}>Home</Link>
                   <Link href="/about"   className="mobile-item" onClick={() => setMenuOpen(false)}>About</Link>
                   <Link href="/gallery" className="mobile-item" onClick={() => setMenuOpen(false)}>Gallery</Link>
                   <Link href="/faq"     className="mobile-item" onClick={() => setMenuOpen(false)}>FAQ</Link>
