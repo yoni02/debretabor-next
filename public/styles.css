@@ -1951,13 +1951,42 @@ header {
 }
 
 @media (max-width: 600px) {
-    .lightbox-nav {
-        width: 40px;
-        height: 40px;
+    .lightbox-inner {
+        gap: 0.5rem;
+    }
+    .lightbox-img {
+        /* Narrow enough to clear the prev/next buttons on small phones */
+        max-width: calc(100vw - 96px);
+        max-height: 68vh;
+    }
+    .lightbox-caption {
+        font-size: 0.85rem;
+        padding: 0 0.5rem;
+    }
+    .lightbox-close {
+        top: 0.75rem;
+        right: 0.75rem;
+        width: 38px;
+        height: 38px;
         font-size: 0.9rem;
     }
-    .lightbox-prev { left: 0.5rem; }
-    .lightbox-next { right: 0.5rem; }
+    .lightbox-nav {
+        width: 38px;
+        height: 38px;
+        font-size: 0.85rem;
+    }
+    .lightbox-prev { left: 0.35rem; }
+    .lightbox-next { right: 0.35rem; }
+}
+
+/* Touch screens: captions and zoom hint always visible (no persistent hover on mobile) */
+@media (hover: none) {
+    .gallery-caption {
+        opacity: 1;
+    }
+    .gallery-zoom-hint {
+        opacity: 0.8;
+    }
 }
 
 /* FAQ */
