@@ -65,15 +65,7 @@ export default function Nav() {
 
         {/* Desktop links */}
         <div className="nav-links">
-          <div className="dropdown">
-            <Link href="/" className={`nav-link has-dropdown${isActive(pathname, '/') && pathname === '/' ? ' nav-link--active' : ''}`}>Home</Link>
-            <div className="dropdown-menu">
-              <Link href="/"       className={`dropdown-item${pathname === '/' ? ' dropdown-item--active' : ''}`}>Home</Link>
-              <Link href="/about"  className={`dropdown-item${isActive(pathname, '/about')   ? ' dropdown-item--active' : ''}`}>About</Link>
-              <Link href="/gallery" className={`dropdown-item${isActive(pathname, '/gallery') ? ' dropdown-item--active' : ''}`}>Gallery</Link>
-              <Link href="/faq"    className={`dropdown-item${isActive(pathname, '/faq')     ? ' dropdown-item--active' : ''}`}>FAQ</Link>
-            </div>
-          </div>
+          <Link href="/" className={`nav-link${pathname === '/' ? ' nav-link--active' : ''}`}>Home</Link>
 
           <div className="dropdown">
             <Link href="/ministries" className={`nav-link has-dropdown${isActive(pathname, '/ministries') ? ' nav-link--active' : ''}`}>Ministries</Link>
@@ -101,20 +93,7 @@ export default function Nav() {
         {/* Mobile slide-down menu */}
         {menuOpen && (
           <div className="mobile-menu">
-            {/* Home group */}
-            <div className="mobile-group">
-              <button className="mobile-group-toggle" onClick={() => toggleDropdown('home')}>
-                Home <span className={`mobile-chevron${openDropdown === 'home' ? ' open' : ''}`}>▾</span>
-              </button>
-              {openDropdown === 'home' && (
-                <div className="mobile-submenu">
-                  <Link href="/"        className="mobile-item" onClick={() => setMenuOpen(false)}>Home</Link>
-                  <Link href="/about"   className="mobile-item" onClick={() => setMenuOpen(false)}>About</Link>
-                  <Link href="/gallery" className="mobile-item" onClick={() => setMenuOpen(false)}>Gallery</Link>
-                  <Link href="/faq"     className="mobile-item" onClick={() => setMenuOpen(false)}>FAQ</Link>
-                </div>
-              )}
-            </div>
+            <Link href="/" className="mobile-item mobile-item--top" onClick={() => setMenuOpen(false)}>Home</Link>
 
             <div className="mobile-group">
               <button className="mobile-group-toggle" onClick={() => toggleDropdown('ministries')}>
