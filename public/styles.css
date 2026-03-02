@@ -1960,19 +1960,11 @@ header {
 /* Lightbox */
 .lightbox {
     position: fixed;
-    /* Explicit edges instead of inset shorthand — more reliable on iOS Safari */
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    /* Use dvh (dynamic viewport height) so iOS URL bar is accounted for */
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
     z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -1983,35 +1975,34 @@ header {
     visibility: visible;
 }
 
+/* Backdrop is absolute inside the fixed parent — avoids nested-fixed iOS bugs */
 .lightbox-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: absolute;
+    inset: 0;
     background: rgba(13, 6, 2, 0.92);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
 }
 
+/* Content area is inset from the button zones so image never hides behind arrows */
 .lightbox-inner {
-    position: relative;
-    z-index: 2;
+    position: absolute;
+    top: 72px;    /* below close button */
+    left: 72px;   /* right of prev arrow */
+    right: 72px;  /* left of next arrow */
+    bottom: 20px;
+    z-index: 5;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    max-width: 90vw;
-    max-height: 90vh;
-    max-height: 90dvh;
     gap: 0.75rem;
 }
 
 .lightbox-img {
-    max-width: 88vw;
-    max-height: 75vh;
-    max-height: 75dvh;
+    max-width: 100%;
+    /* 3rem reserved for caption + counter rows */
+    max-height: calc(100% - 3rem);
     border-radius: var(--radius-lg);
     object-fit: contain;
     display: block;
@@ -2036,6 +2027,7 @@ header {
     font-family: 'Noto Serif Ethiopic', Georgia, serif;
     letter-spacing: 0.03em;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .lightbox-counter {
@@ -2043,13 +2035,15 @@ header {
     font-size: 0.8rem;
     letter-spacing: 0.08em;
     opacity: 0.75;
+    flex-shrink: 0;
 }
 
+/* Close and nav buttons are absolute within the fixed overlay, not nested-fixed */
 .lightbox-close {
-    position: fixed;
-    top: 1.2rem;
-    right: 1.4rem;
-    z-index: 3;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -2076,10 +2070,10 @@ header {
 }
 
 .lightbox-nav {
-    position: fixed;
+    position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 3;
+    z-index: 10;
     width: 52px;
     height: 52px;
     border-radius: 50%;
@@ -2099,8 +2093,8 @@ header {
         0 0 0 6px var(--eth-gold-rim);
 }
 
-.lightbox-prev { left: 1.2rem; }
-.lightbox-next { right: 1.2rem; }
+.lightbox-prev { left: 0.75rem; }
+.lightbox-next { right: 0.75rem; }
 
 .lightbox-nav:hover {
     background: rgba(122, 26, 26, 0.85);
@@ -2110,32 +2104,33 @@ header {
 
 @media (max-width: 600px) {
     .lightbox-inner {
-        gap: 0.5rem;
+        top: 56px;
+        left: 48px;
+        right: 48px;
+        bottom: 12px;
+        gap: 0.4rem;
     }
     .lightbox-img {
-        /* Narrow enough to clear the prev/next buttons on small phones */
-        max-width: calc(100vw - 96px);
-        max-height: 68vh;
-        max-height: 68dvh;
+        max-height: calc(100% - 2.5rem);
     }
     .lightbox-caption {
-        font-size: 0.85rem;
-        padding: 0 0.5rem;
+        font-size: 0.8rem;
+        padding: 0 0.25rem;
     }
     .lightbox-close {
-        top: 0.75rem;
-        right: 0.75rem;
-        width: 38px;
-        height: 38px;
-        font-size: 0.9rem;
+        top: 0.6rem;
+        right: 0.6rem;
+        width: 36px;
+        height: 36px;
+        font-size: 0.85rem;
     }
     .lightbox-nav {
         width: 38px;
         height: 38px;
         font-size: 0.85rem;
     }
-    .lightbox-prev { left: 0.35rem; }
-    .lightbox-next { right: 0.35rem; }
+    .lightbox-prev { left: 0.25rem; }
+    .lightbox-next { right: 0.25rem; }
 }
 
 /* Touch screens: captions and zoom hint always visible (no persistent hover on mobile) */
