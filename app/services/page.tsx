@@ -61,7 +61,25 @@ export default function ServicesPage() {
       <div className="content-section">
         <h2>First Time Visiting?</h2>
         <p>We&apos;re honored to welcome you. Feel free to arrive a bit early, ask questions, and speak with our priest or parish team before or after the service.</p>
-        <p>Dress modestly and reverently. If you are not Orthodox, you are warmly invited to be present and pray with us as we worship.</p>
+        <p>If you are not Orthodox, you are warmly invited to be present and pray with us as we worship.</p>
+      </div>
+
+      <div className="content-section">
+        <h2>What to Wear</h2>
+        <p>We ask all who attend to dress modestly and reverently as a sign of respect before God.</p>
+        <div className="attire-grid">
+          <div className="attire-card">
+            <div className="attire-icon"><i className="fas fa-male"></i></div>
+            <h3>Men</h3>
+            <p>Men are encouraged to wear a <strong>netela</strong> (traditional white shawl) draped around the body during worship.</p>
+          </div>
+          <div className="attire-card">
+            <div className="attire-icon"><i className="fas fa-female"></i></div>
+            <h3>Women</h3>
+            <p>Women are encouraged to wear a <strong>netela</strong> covering the head, along with a modest dress or skirt.</p>
+          </div>
+        </div>
+        <p className="attire-note">Netelas are available at the church if you do not have one. All are welcome regardless of attire — come as you are.</p>
       </div>
     </>
   );

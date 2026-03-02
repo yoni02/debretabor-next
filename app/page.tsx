@@ -63,6 +63,10 @@ export default function HomePage() {
         <p className="mission-text">
           We gather to glorify the Holy Trinity, proclaim the Gospel, and serve our community with love and humility.
         </p>
+        <blockquote className="mission-verse">
+          <p>&ldquo;And he was transfigured before them, and his face shone like the sun, and his clothes became white as light.&rdquo;</p>
+          <cite>— Matthew 17:2</cite>
+        </blockquote>
       </section>
 
       {/* Community Photo Strip */}

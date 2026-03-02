@@ -11,6 +11,7 @@ export default function ContactPage() {
         <h1>Visit &amp; Contact</h1>
         <p>We&apos;d be glad to hear from you</p>
       </div>
+
       <div className="contact-info">
         <div className="contact-card">
           <h3><i className="fas fa-map-marker-alt"></i> Address</h3>
@@ -28,16 +29,31 @@ export default function ContactPage() {
         </div>
         <div className="contact-card">
           <h3><i className="fas fa-phone"></i> Phone</h3>
-          <p>Add your parish office phone number</p>
+          <p><a href="tel:+19197445709" className="address-link">919-744-5709</a></p>
         </div>
         <div className="contact-card">
           <h3><i className="fas fa-envelope"></i> Email</h3>
-          <p>eotgfnc@gmail.com</p>
+          <p><a href="mailto:eotgfnc@gmail.com" className="address-link">eotgfnc@gmail.com</a></p>
         </div>
         <div className="contact-card">
-          <h3><i className="fas fa-clock"></i> Office Hours</h3>
-          <p>Contact us for office hours and availability</p>
+          <h3><i className="fas fa-clock"></i> Sunday Service</h3>
+          <p>Morning Chants — 5:30 AM</p>
+          <p>Divine Liturgy — 6:00 AM</p>
         </div>
+      </div>
+
+      {/* Google Maps embed */}
+      <div className="map-embed-wrapper">
+        <iframe
+          title="Debre Tabor Holy God Father EOTC — 231 Taft St, Durham, NC 27703"
+          src="https://maps.google.com/maps?q=231+Taft+St,+Durham,+NC+27703&output=embed"
+          width="100%"
+          height="100%"
+          style={{ border: 0 }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
       </div>
     </>
   );
