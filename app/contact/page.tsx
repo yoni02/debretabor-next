@@ -17,7 +17,7 @@ export default function ContactPage() {
           <h3><i className="fas fa-map-marker-alt"></i> Address</h3>
           <p>
             <a
-              href="https://www.google.com/maps/search/?api=1&query=231+Taft+St+Durham+NC+27703"
+              href="https://www.google.com/maps/search/?api=1&query=Debre+Tabor+Holy+God+Father+Ethiopian+Orthodox+Tewahedo+Church+231+Taft+St+Durham+NC+27703"
               target="_blank"
               rel="noopener noreferrer"
               className="address-link"
@@ -46,7 +46,7 @@ export default function ContactPage() {
       <div className="map-embed-wrapper">
         <iframe
           title="Debre Tabor Holy God Father EOTC — 231 Taft St, Durham, NC 27703"
-          src="https://maps.google.com/maps?q=231+Taft+St,+Durham,+NC+27703&output=embed"
+          src="https://maps.google.com/maps?q=Debre+Tabor+Holy+God+Father+Ethiopian+Orthodox+Tewahedo+Church,+231+Taft+St,+Durham,+NC+27703&output=embed"
           width="100%"
           height="100%"
           style={{ border: 0 }}
