@@ -93,7 +93,7 @@ export default function GalleryGrid({ photos }: Props) {
     const dy = e.changedTouches[0].clientY - touchStartY.current;
     // Only trigger if horizontal swipe is dominant and long enough
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
-      dx < 0 ? next() : prev();
+      if (dx < 0) next(); else prev();
     }
   }
 
