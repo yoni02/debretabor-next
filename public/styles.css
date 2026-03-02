@@ -2398,6 +2398,33 @@ header {
     font-style: italic;
 }
 
+/* Find Us section (home page) */
+.find-us-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.find-us-title {
+    font-size: 1.5rem;
+    color: var(--accent-strong);
+    margin-bottom: 0.5rem;
+}
+
+.find-us-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+}
+
+.find-us-link {
+    color: var(--accent-strong);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.find-us-link:hover { opacity: 0.8; }
+
 /* Google Maps embed */
 .map-embed-wrapper {
     width: 100%;
