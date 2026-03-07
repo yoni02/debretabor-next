@@ -12,12 +12,6 @@ export default function HomePage() {
     <>
       <AnimationsInit isHome />
 
-      {/* Transfiguration background */}
-      <div className="transfiguration-bg" aria-hidden="true">
-        <div className="transfiguration-bg-img"></div>
-        <div className="transfiguration-bg-overlay"></div>
-      </div>
-
       {/* Hero */}
       <section className="hero">
         <div className="hero-bg"></div>

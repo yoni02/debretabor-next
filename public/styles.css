@@ -166,11 +166,7 @@ img {
     display: block;
 }
 
-/* Home: Transfiguration scene background */
-.home-page {
-    position: relative;
-}
-
+/* Global watermark background — shown on every page */
 .transfiguration-bg {
     position: fixed;
     inset: 0;
@@ -183,30 +179,30 @@ img {
     position: absolute;
     inset: 0;
     background-image: url('church-profile.png');
-    background-size: 55%;
+    background-size: 52%;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.45;
+    opacity: 0.18;
 }
 
 .transfiguration-bg-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(160deg, rgba(248, 244, 236, 0.78) 0%, rgba(235, 229, 219, 0.72) 50%, rgba(229, 221, 208, 0.78) 100%);
+    background: linear-gradient(160deg,
+        rgba(248, 244, 236, 0.45) 0%,
+        rgba(235, 229, 219, 0.35) 50%,
+        rgba(229, 221, 208, 0.45) 100%);
     pointer-events: none;
 }
 
-.home-page .page {
-    position: relative;
-    z-index: 2;
-}
-
+/* Page content sits above the fixed background */
 .page {
+    position: relative;
+    z-index: 1;
     min-height: 100vh;
     min-height: 100svh;
     display: flex;
     flex-direction: column;
-    position: relative;
 }
 
 .shell {

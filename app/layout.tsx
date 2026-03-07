@@ -24,6 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        {/* Global watermark background — visible on every page */}
+        <div className="transfiguration-bg" aria-hidden="true">
+          <div className="transfiguration-bg-img"></div>
+          <div className="transfiguration-bg-overlay"></div>
+        </div>
         <div className="page">
           <div className="shell">
             <Nav />
