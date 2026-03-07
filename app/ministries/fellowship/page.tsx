@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import AnimationsInit from '@/components/AnimationsInit';
 
 export const metadata: Metadata = { title: 'Fellowship' };
@@ -12,6 +13,21 @@ export default function FellowshipPage() {
         <h1>Fellowship</h1>
         <p>Community, Culture &amp; Shared Faith</p>
       </div>
+
+      {/* Full-width photo banner */}
+      <div className="ministry-photo-banner">
+        <Image
+          src="/fellowship.png"
+          alt="Fellowship community gathering after liturgy"
+          fill
+          style={{ objectFit: 'cover', objectPosition: 'center' }}
+          sizes="100vw"
+          priority
+        />
+        <div className="ministry-photo-banner-overlay" />
+        <p className="ministry-photo-banner-caption">Our community after Sunday Liturgy</p>
+      </div>
+
       <div className="content-section">
         <h2>Who We Are</h2>
         <p>The Fellowship ministry is the heartbeat of our community life. We gather members of all ages to strengthen bonds of friendship, share in the richness of Ethiopian Orthodox culture, and support one another through every season of life.</p>

@@ -536,6 +536,9 @@ header {
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
     margin-bottom: 2rem;
+    max-width: 860px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .quick-card {
@@ -2175,25 +2178,53 @@ header {
     margin-bottom: 3rem;
 }
 
+/* Photo-backed ministry cards */
 .ministry-card {
-    padding: 2rem;
     border-radius: var(--radius-xl);
+    overflow: hidden;
     background: rgba(255, 252, 248, 0.9);
     border: 1px solid var(--border-soft);
     box-shadow: 0 4px 20px rgba(61, 53, 41, 0.06);
-    text-align: center;
     transition: all var(--transition-med);
+    display: flex;
+    flex-direction: column;
 }
 
 .ministry-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(61, 53, 41, 0.1);
+    box-shadow: 0 12px 32px rgba(61, 53, 41, 0.14);
     border-color: rgba(184, 134, 11, 0.4);
+}
+
+/* Photo area at top of each card */
+.ministry-card-img {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.ministry-card-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(19, 8, 4, 0.08) 0%,
+        rgba(19, 8, 4, 0.35) 100%
+    );
+}
+
+/* Text + button area below the photo */
+.ministry-card-body {
+    padding: 1.5rem 2rem 2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .ministry-card h3 {
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     color: var(--accent-strong);
 }
 
@@ -2201,6 +2232,74 @@ header {
     color: var(--text-muted);
     margin-bottom: 1.5rem;
     line-height: 1.7;
+    flex: 1;
+}
+
+/* ── Ministry page photo components ── */
+
+/* Full-width photo banner for fellowship & sunday-school pages */
+.ministry-photo-banner {
+    position: relative;
+    width: 100%;
+    height: 340px;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+    box-shadow:
+        0 0 0 2px var(--eth-gold-rim),
+        0 0 0 5px var(--eth-ink),
+        0 0 0 7px var(--eth-gold-rim),
+        0 8px 32px rgba(19, 8, 4, 0.14);
+}
+
+.ministry-photo-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(19, 8, 4, 0.04) 0%,
+        rgba(19, 8, 4, 0.5) 100%
+    );
+}
+
+.ministry-photo-banner-caption {
+    position: absolute;
+    bottom: 1rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    color: var(--eth-ivory);
+    font-size: 0.9rem;
+    font-style: italic;
+    letter-spacing: 0.04em;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    margin: 0;
+}
+
+/* Side-by-side 2-photo strip for choir page */
+.ministry-photo-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.ministry-photo-pair-item {
+    position: relative;
+    height: 300px;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow:
+        0 0 0 2px var(--eth-gold-rim),
+        0 0 0 5px var(--eth-ink),
+        0 0 0 7px var(--eth-gold-rim),
+        0 8px 32px rgba(19, 8, 4, 0.14);
+}
+
+@media (max-width: 600px) {
+    .ministry-photo-banner { height: 220px; }
+    .ministry-photo-pair { grid-template-columns: 1fr; }
+    .ministry-photo-pair-item { height: 220px; }
+    .ministry-card-img { height: 180px; }
 }
 
 /* Schedule */

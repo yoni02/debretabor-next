@@ -49,7 +49,7 @@ export default function ServicesPage() {
             </div>
           </div>
           <div className="schedule-item">
-            <div className="schedule-icon"><i className="fas fa-calendar-star"></i></div>
+            <div className="schedule-icon"><i className="fas fa-plate-wheat"></i></div>
             <div>
               <div className="schedule-day">Feast Days</div>
               <div className="schedule-time">As announced — Major feasts &amp; vigils</div>

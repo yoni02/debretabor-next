@@ -35,13 +35,29 @@ export default function HomePage() {
           <i className="fas fa-church"></i>
           <span>Services</span>
         </Link>
-        <Link href="/gallery" className="quick-card">
-          <i className="fas fa-images"></i>
-          <span>Gallery</span>
+        <Link href="/about" className="quick-card">
+          <i className="fas fa-landmark"></i>
+          <span>About</span>
+        </Link>
+        <Link href="/sacraments" className="quick-card">
+          <i className="fas fa-cross"></i>
+          <span>Sacraments</span>
         </Link>
         <Link href="/ministries" className="quick-card">
           <i className="fas fa-hands-praying"></i>
           <span>Ministries</span>
+        </Link>
+        <Link href="/gallery" className="quick-card">
+          <i className="fas fa-images"></i>
+          <span>Gallery</span>
+        </Link>
+        <Link href="/faq" className="quick-card">
+          <i className="fas fa-circle-question"></i>
+          <span>FAQ</span>
+        </Link>
+        <Link href="/contact" className="quick-card">
+          <i className="fas fa-location-dot"></i>
+          <span>Contact</span>
         </Link>
         <Link href="/donations" className="quick-card">
           <i className="fas fa-heart"></i>
