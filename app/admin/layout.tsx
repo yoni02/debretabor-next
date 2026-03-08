@@ -6,9 +6,9 @@ import { usePathname } from 'next/navigation';
 import AdminSignOut from '@/components/AdminSignOut';
 
 const NAV_LINKS = [
-  { href: '/admin',          label: 'Dashboard', icon: '⊞' },
-  { href: '/admin/gallery',  label: 'Gallery',   icon: '🖼' },
-  { href: '/admin/events',   label: 'Events',    icon: '📅' },
+  { href: '/admin',          label: 'Dashboard', icon: 'fa-gauge-high' },
+  { href: '/admin/gallery',  label: 'Gallery',   icon: 'fa-images' },
+  { href: '/admin/events',   label: 'Events',    icon: 'fa-calendar-days' },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -54,7 +54,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 background: active ? '#C8941A' : 'transparent',
                 transition: 'all 0.15s',
               }}>
-                <span>{icon}</span> {label}
+                <i className={`fas ${icon}`} style={{ width: '1em', textAlign: 'center' }} /> {label}
               </Link>
             );
           })}

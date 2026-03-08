@@ -112,11 +112,11 @@ export default function AdminEventsPage() {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.error || err.details || 'Unknown error');
       }
-      setMsg(editId ? '✓ Event updated.' : '✓ Event added.');
+      setMsg(editId ? 'Event updated.' : 'Event added.');
       cancelEdit();
       await fetchEvents();
     } catch (err) {
-      setMsg(`✗ ${err instanceof Error ? err.message : 'Error saving event'}`);
+      setMsg(`Error: ${err instanceof Error ? err.message : 'Error saving event'}`);
     }
     setLoading(false);
   }
@@ -124,7 +124,7 @@ export default function AdminEventsPage() {
   async function handleDelete(id: string) {
     if (!confirm('Delete this event?')) return;
     await fetch(`/api/events/${id}`, { method: 'DELETE' });
-    setMsg('✓ Event deleted.');
+    setMsg('Event deleted.');
     await fetchEvents();
   }
 
@@ -147,12 +147,12 @@ export default function AdminEventsPage() {
           <p style={{ color: '#6b5d4d', fontSize: '0.85rem', margin: '0.25rem 0 0' }}>
             {nonLiturgy.length} special event{nonLiturgy.length !== 1 ? 's' : ''}
             <span style={{ marginLeft: 8, padding: '0.15rem 0.6rem', borderRadius: 999, fontSize: '0.72rem', background: 'rgba(122,24,24,0.08)', color: '#7A1818', fontWeight: 600 }}>
-              ⛪ Sunday Divine Liturgy auto-scheduled
+              <i className="fas fa-church" style={{ marginRight: 4 }} />Sunday Divine Liturgy auto-scheduled
             </span>
           </p>
         </div>
         <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
-          {msg && <span style={{ fontSize: '0.85rem', color: msg.startsWith('✓') ? '#2d6a2d' : '#7A1818', fontWeight: 600 }}>{msg}</span>}
+          {msg && <span style={{ fontSize: '0.85rem', color: msg.startsWith('Error') ? '#7A1818' : '#2d6a2d', fontWeight: 600 }}>{msg}</span>}
           <button onClick={() => { setShowForm(v => !v); if (showForm) cancelEdit(); }} style={{
             padding: '0.6rem 1.4rem', borderRadius: 999,
             background: showForm ? 'rgba(184,168,138,0.2)' : '#130804',
@@ -160,7 +160,7 @@ export default function AdminEventsPage() {
             border: '1px solid ' + (showForm ? 'rgba(184,168,138,0.4)' : '#C8941A'),
             fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem',
           }}>
-            {showForm ? '✕ Cancel' : '+ Add Event'}
+            <i className={`fas ${showForm ? 'fa-times' : 'fa-plus'}`} style={{ marginRight: 4 }} />{showForm ? 'Cancel' : 'Add Event'}
           </button>
         </div>
       </div>
@@ -173,7 +173,7 @@ export default function AdminEventsPage() {
           display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem',
         }}>
           <h2 style={{ gridColumn: '1/-1', fontSize: '1rem', color: '#b8860b', margin: 0, paddingBottom: '0.5rem', borderBottom: '1px solid rgba(184,168,138,0.25)' }}>
-            {editId ? '✏️ Edit Event' : '+ New Event'}
+            <i className="fas fa-pen" style={{ marginRight: 6 }} />{editId ? 'Edit Event' : 'New Event'}
           </h2>
 
           {/* Type pills — liturgy is auto-managed, so only offer the other three */}
@@ -248,7 +248,7 @@ export default function AdminEventsPage() {
       {/* Event list grouped by month */}
       {filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '3rem', color: '#6b5d4d', background: '#fff', borderRadius: 20, border: '1px dashed rgba(184,168,138,0.5)' }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>📅</div>
+          <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem', color: '#b8860b' }}><i className="fas fa-calendar-days" /></div>
           <p style={{ fontStyle: 'italic' }}>No events found. Add one above.</p>
         </div>
       ) : (

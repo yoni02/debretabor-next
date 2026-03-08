@@ -24,7 +24,7 @@ export default function AdminDashboard() {
     );
   }, [router]);
 
-  const card = (href: string, icon: string, label: string, sub: string, count: number | null, color: string) => (
+  const card = (href: string, iconClass: string, label: string, sub: string, count: number | null, color: string) => (
     <Link href={href} style={{ textDecoration: 'none' }}>
       <div style={{
         background: '#fff', border: '1px solid rgba(184,168,138,0.3)', borderRadius: 20,
@@ -36,7 +36,7 @@ export default function AdminDashboard() {
         onMouseLeave={e => (e.currentTarget.style.transform = '', e.currentTarget.style.boxShadow = '0 2px 12px rgba(61,53,41,0.07)')}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '2.2rem' }}>{icon}</span>
+          <i className={`fas ${iconClass}`} style={{ fontSize: '2rem', color }} />
           {count !== null && (
             <span style={{ background: color, color: '#fff', borderRadius: 999, padding: '0.2rem 0.75rem', fontSize: '0.8rem', fontWeight: 700 }}>
               {count} items
@@ -62,8 +62,8 @@ export default function AdminDashboard() {
 
       {/* Stat cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
-        {card('/admin/gallery', '🖼️', 'Gallery Manager', 'Upload, reorder & caption photos shown on the site', photoCount, '#b8860b')}
-        {card('/admin/events', '📅', 'Events & Calendar', 'Add feasts, fellowship & Bible study events (Sunday liturgy is auto-scheduled)', eventCount, '#7A1818')}
+        {card('/admin/gallery', 'fa-images', 'Gallery Manager', 'Upload, reorder & caption photos shown on the site', photoCount, '#b8860b')}
+        {card('/admin/events', 'fa-calendar-days', 'Events & Calendar', 'Add feasts, fellowship & Bible study events (Sunday liturgy is auto-scheduled)', eventCount, '#7A1818')}
       </div>
 
       {/* Quick tips */}
@@ -71,13 +71,13 @@ export default function AdminDashboard() {
         <h2 style={{ color: '#b8860b', fontSize: '1.05rem', marginBottom: '1rem' }}>Quick Reference</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
           {[
-            ['🖼️', 'Gallery', 'Upload photos, edit captions, and drag to reorder. Changes appear on the Gallery page.'],
-            ['📅', 'Events', 'Add any type of event — liturgies, feasts, bible study, or fellowship. They show on the calendar.'],
-            ['↕️', 'Photo Order', 'Drag photos in the gallery grid to set display order, then click "Save Order".'],
-            ['✏️', 'Captions', 'Click a caption to edit it inline, then press Enter or click Save.'],
-          ].map(([icon, title, desc]) => (
+            ['fa-images', 'Gallery', 'Upload photos, edit captions, and drag to reorder. Changes appear on the Gallery page.'],
+            ['fa-calendar-days', 'Events', 'Add any type of event — liturgies, feasts, bible study, or fellowship. They show on the calendar.'],
+            ['fa-arrows-up-down', 'Photo Order', 'Drag photos in the gallery grid to set display order, then click "Save Order".'],
+            ['fa-pen', 'Captions', 'Click a caption to edit it inline, then press Enter or click Save.'],
+          ].map(([iconClass, title, desc]) => (
             <div key={title as string} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-              <span style={{ fontSize: '1.1rem', marginTop: '0.05rem' }}>{icon}</span>
+              <i className={`fas ${iconClass}`} style={{ fontSize: '1rem', color: '#b8860b', marginTop: '0.15rem', width: '1.25em', textAlign: 'center' }} />
               <div>
                 <span style={{ fontWeight: 600, color: '#3d3529', fontSize: '0.9rem' }}>{title} — </span>
                 <span style={{ color: '#6b5d4d', fontSize: '0.88rem' }}>{desc}</span>

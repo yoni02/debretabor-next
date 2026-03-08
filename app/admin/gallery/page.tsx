@@ -61,10 +61,10 @@ export default function AdminGalleryPage() {
       const res = await fetch('/api/admin/seed-gallery', { method: 'POST' });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || 'Seed failed');
-      setMsg(json.inserted ? `✓ Added ${json.inserted} default photos.` : `ℹ ${json.message}`);
+      setMsg(json.inserted ? `Added ${json.inserted} default photos.` : json.message);
       await fetchPhotos();
     } catch (err) {
-      setMsg(`✗ ${err instanceof Error ? err.message : 'Seed failed'}`);
+      setMsg(`Error: ${err instanceof Error ? err.message : 'Seed failed'}`);
     }
     setSeeding(false);
   }
@@ -84,13 +84,13 @@ export default function AdminGalleryPage() {
       fd.append('section', section);
       const res = await fetch('/api/gallery', { method: 'POST', body: fd });
       if (!res.ok) throw new Error(await res.text());
-      setMsg('✓ Photo uploaded.');
+      setMsg('Photo uploaded.');
       setCaption(''); setSection('gallery');
       if (fileRef.current) fileRef.current.value = '';
       setShowUpload(false);
       await fetchPhotos();
     } catch (err) {
-      setMsg(`✗ ${err instanceof Error ? err.message : 'Upload failed'}`);
+      setMsg(`Error: ${err instanceof Error ? err.message : 'Upload failed'}`);
     }
     setUploading(false);
   }
@@ -99,8 +99,8 @@ export default function AdminGalleryPage() {
   async function handleDelete(id: string) {
     if (!confirm('Permanently delete this photo?')) return;
     const res = await fetch(`/api/gallery/${id}`, { method: 'DELETE' });
-    if (!res.ok) { setMsg('✗ Delete failed.'); return; }
-    setMsg('✓ Photo deleted.');
+    if (!res.ok) { setMsg('Error: Delete failed.'); return; }
+    setMsg('Photo deleted.');
     await fetchPhotos();
     setOrderDirty(false);
   }
@@ -112,9 +112,9 @@ export default function AdminGalleryPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ caption: editCaptionVal }),
     });
-    if (!res.ok) { setMsg('✗ Caption save failed.'); return; }
+    if (!res.ok) { setMsg('Error: Caption save failed.'); return; }
     setEditCaptionId(null);
-    setMsg('✓ Caption saved.');
+    setMsg('Caption saved.');
     await fetchPhotos();
   }
 
@@ -147,10 +147,10 @@ export default function AdminGalleryPage() {
           })
         )
       );
-      setMsg('✓ Order saved.');
+      setMsg('Order saved.');
       setOrderDirty(false);
     } catch {
-      setMsg('✗ Failed to save order.');
+      setMsg('Error: Failed to save order.');
     }
     setSavingOrder(false);
   }
@@ -167,7 +167,7 @@ export default function AdminGalleryPage() {
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
           {msg && (
-            <span style={{ fontSize: '0.85rem', color: msg.startsWith('✓') ? '#2d6a2d' : '#7A1818', fontWeight: 600 }}>{msg}</span>
+            <span style={{ fontSize: '0.85rem', color: msg.startsWith('Error') ? '#7A1818' : '#2d6a2d', fontWeight: 600 }}>{msg}</span>
           )}
           {orderDirty && (
             <button onClick={saveOrder} disabled={savingOrder} style={{
@@ -175,7 +175,7 @@ export default function AdminGalleryPage() {
               background: 'linear-gradient(135deg,#c9a227,#b8860b)', color: '#faf8f5',
               fontWeight: 700, border: 'none', cursor: 'pointer', fontSize: '0.85rem',
             }}>
-              {savingOrder ? 'Saving…' : '↕ Save Order'}
+              <i className="fas fa-arrows-up-down" style={{ marginRight: 6 }} />{savingOrder ? 'Saving…' : 'Save Order'}
             </button>
           )}
           {photos.length === 0 && (
@@ -186,7 +186,7 @@ export default function AdminGalleryPage() {
               fontWeight: 700, cursor: seeding ? 'not-allowed' : 'pointer', fontSize: '0.85rem',
               opacity: seeding ? 0.7 : 1,
             }}>
-              {seeding ? 'Initializing…' : '⬇ Initialize Default Photos'}
+              <i className="fas fa-download" style={{ marginRight: 6 }} />{seeding ? 'Initializing…' : 'Initialize Default Photos'}
             </button>
           )}
           <button onClick={() => setShowUpload(v => !v)} style={{
@@ -196,7 +196,7 @@ export default function AdminGalleryPage() {
             border: '1px solid ' + (showUpload ? 'rgba(184,168,138,0.4)' : '#C8941A'),
             fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem',
           }}>
-            {showUpload ? '✕ Cancel' : '+ Upload Photo'}
+            <i className={`fas ${showUpload ? 'fa-times' : 'fa-plus'}`} style={{ marginRight: 4 }} />{showUpload ? 'Cancel' : 'Upload Photo'}
           </button>
         </div>
       </div>
@@ -241,7 +241,7 @@ export default function AdminGalleryPage() {
       {/* Photo grid */}
       {photos.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '4rem', color: '#6b5d4d', background: '#fff', borderRadius: 20, border: '1px dashed rgba(184,168,138,0.5)' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🖼️</div>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem', color: '#b8860b' }}><i className="fas fa-images" /></div>
           <p style={{ fontStyle: 'italic' }}>No photos yet. Click &ldquo;Upload Photo&rdquo; to add your first image.</p>
         </div>
       ) : (
@@ -276,7 +276,7 @@ export default function AdminGalleryPage() {
                 <div style={{
                   position: 'absolute', top: 8, right: 8, background: 'rgba(19,8,4,0.6)',
                   color: '#d4b483', borderRadius: 6, padding: '0.25rem 0.4rem', fontSize: '0.75rem',
-                }}>⠿</div>
+                }}><i className="fas fa-grip-vertical" /></div>
               </div>
 
               {/* Info */}
@@ -294,11 +294,11 @@ export default function AdminGalleryPage() {
                     <button onClick={() => saveCaption(photo.id)} style={{
                       padding: '0.3rem 0.6rem', borderRadius: 8, background: '#b8860b',
                       color: '#fff', border: 'none', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700,
-                    }}>✓</button>
+                    }}><i className="fas fa-check" /></button>
                     <button onClick={() => setEditCaptionId(null)} style={{
                       padding: '0.3rem 0.5rem', borderRadius: 8, background: 'rgba(184,168,138,0.2)',
                       color: '#6b5d4d', border: '1px solid rgba(184,168,138,0.4)', cursor: 'pointer', fontSize: '0.75rem',
-                    }}>✕</button>
+                    }}><i className="fas fa-times" /></button>
                   </div>
                 ) : (
                   <button
@@ -315,7 +315,7 @@ export default function AdminGalleryPage() {
                     onMouseEnter={e => (e.currentTarget.style.background = 'rgba(184,168,138,0.15)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'none')}
                   >
-                    ✏️ {photo.caption || 'Add caption…'}
+                    <i className="fas fa-pen" style={{ marginRight: 6, opacity: 0.7 }} />{photo.caption || 'Add caption…'}
                   </button>
                 )}
 
