@@ -18,7 +18,10 @@ export default function AdminDashboard() {
       setEmail(session.user.email ?? '');
     });
     fetch('/api/gallery').then(r => r.json()).then(d => setPhotoCount(Array.isArray(d) ? d.length : 0));
-    fetch('/api/events').then(r => r.json()).then(d => setEventCount(Array.isArray(d) ? d.length : 0));
+    // Exclude auto-managed liturgy events — only count special events the admin creates
+    fetch('/api/events').then(r => r.json()).then(d =>
+      setEventCount(Array.isArray(d) ? d.filter((e: { type: string }) => e.type !== 'liturgy').length : 0)
+    );
   }, [router]);
 
   const card = (href: string, icon: string, label: string, sub: string, count: number | null, color: string) => (
@@ -60,7 +63,7 @@ export default function AdminDashboard() {
       {/* Stat cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
         {card('/admin/gallery', '🖼️', 'Gallery Manager', 'Upload, reorder & caption photos shown on the site', photoCount, '#b8860b')}
-        {card('/admin/events', '📅', 'Events & Calendar', 'Add, edit & delete liturgies, feasts, fellowship events', eventCount, '#7A1818')}
+        {card('/admin/events', '📅', 'Events & Calendar', 'Add feasts, fellowship & Bible study events (Sunday liturgy is auto-scheduled)', eventCount, '#7A1818')}
       </div>
 
       {/* Quick tips */}
