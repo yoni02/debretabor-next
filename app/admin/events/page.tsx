@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import type { ChurchEvent, EventType } from '@/lib/eventData';
 
-const EMPTY: Omit<ChurchEvent, '_id'> = { title: '', date: '', time: '6:00 AM', type: 'liturgy', description: '' };
+const EMPTY: Omit<ChurchEvent, '_id'> = { title: '', date: '', time: '9:00 AM', type: 'fellowship', description: '' };
 
 const HOURS   = Array.from({ length: 12 }, (_, i) => String(i + 1));
 const MINUTES = ['00', '15', '30', '45'];
@@ -176,9 +176,9 @@ export default function AdminEventsPage() {
             {editId ? '✏️ Edit Event' : '+ New Event'}
           </h2>
 
-          {/* Type pills — pick before everything else */}
+          {/* Type pills — liturgy is auto-managed, so only offer the other three */}
           <div style={{ gridColumn: '1/-1', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-            {(Object.entries(TYPE_META) as [EventType, typeof TYPE_META[EventType]][]).map(([type, meta]) => (
+            {(Object.entries(TYPE_META).filter(([t]) => t !== 'liturgy') as [EventType, typeof TYPE_META[EventType]][]).map(([type, meta]) => (
               <button key={type} type="button" onClick={() => setForm(f => ({ ...f, type }))} style={{
                 padding: '0.45rem 1.1rem', borderRadius: 999, fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer',
                 border: `2px solid ${meta.color}`,
