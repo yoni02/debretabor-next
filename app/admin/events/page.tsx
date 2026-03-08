@@ -128,6 +128,21 @@ export default function AdminEventsPage() {
     await fetchEvents();
   }
 
+  async function seedSundays() {
+    if (!confirm('This will add Divine Liturgy at 7:00 AM for every Sunday over the next 2 years (skipping dates already scheduled). Continue?')) return;
+    setLoading(true); setMsg('');
+    try {
+      const res = await fetch('/api/admin/seed-sundays', { method: 'POST' });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Failed');
+      setMsg(`✓ ${json.message}`);
+      await fetchEvents();
+    } catch (err) {
+      setMsg(`✗ ${err instanceof Error ? err.message : 'Error seeding Sundays'}`);
+    }
+    setLoading(false);
+  }
+
   // Group filtered events by month
   const filtered = events.filter(ev => filter === 'all' || ev.type === filter);
   const grouped: Record<string, ChurchEvent[]> = {};
@@ -146,8 +161,21 @@ export default function AdminEventsPage() {
             {events.length} total event{events.length !== 1 ? 's' : ''}
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
           {msg && <span style={{ fontSize: '0.85rem', color: msg.startsWith('✓') ? '#2d6a2d' : '#7A1818', fontWeight: 600 }}>{msg}</span>}
+          <button
+            onClick={seedSundays}
+            disabled={loading}
+            title="Add Divine Liturgy at 7:00 AM for every Sunday over the next 2 years (skips already-scheduled dates)"
+            style={{
+              padding: '0.6rem 1.2rem', borderRadius: 999,
+              background: 'rgba(122,24,24,0.08)', color: '#7A1818',
+              border: '1px solid rgba(122,24,24,0.35)',
+              fontWeight: 700, cursor: 'pointer', fontSize: '0.82rem',
+            }}
+          >
+            📅 Seed All Sundays
+          </button>
           <button onClick={() => { setShowForm(v => !v); if (showForm) cancelEdit(); }} style={{
             padding: '0.6rem 1.4rem', borderRadius: 999,
             background: showForm ? 'rgba(184,168,138,0.2)' : '#130804',
