@@ -28,16 +28,16 @@ async function getPhotos() {
   try {
     const { data, error } = await createSupabaseAdmin()
       .from('gallery_photos')
-      .select('public_url, caption, sort_order')
+      .select('public_url, caption, sort_order, created_at')
       .order('created_at', { ascending: true });
 
     if (error || !data || data.length === 0) return FALLBACK_PHOTOS;
 
-    // Sort by sort_order if present, otherwise keep created_at order
+    // Match admin: sort_order asc (nulls last), then created_at asc as tiebreaker
     const sorted = [...data].sort((a, b) => {
       const ao = a.sort_order ?? 9999;
       const bo = b.sort_order ?? 9999;
-      return ao - bo;
+      return ao !== bo ? ao - bo : (a.created_at ?? '').localeCompare(b.created_at ?? '');
     });
 
     return sorted.map(p => ({

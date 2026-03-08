@@ -9,6 +9,7 @@ interface Photo {
   caption: string;
   section: string;
   sort_order?: number;
+  created_at?: string;
 }
 
 const I = (style: React.CSSProperties = {}): React.CSSProperties => ({
@@ -45,7 +46,12 @@ export default function AdminGalleryPage() {
   const fetchPhotos = useCallback(async () => {
     const res = await fetch('/api/gallery');
     const data: Photo[] = await res.json();
-    setPhotos(data.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)));
+    // Match public site: sort_order asc (nulls last), then created_at asc
+    setPhotos(data.sort((a, b) => {
+      const ao = a.sort_order ?? 9999;
+      const bo = b.sort_order ?? 9999;
+      return ao !== bo ? ao - bo : (a.created_at ?? '').localeCompare(b.created_at ?? '');
+    }));
   }, []);
 
   async function seedDefaults() {
