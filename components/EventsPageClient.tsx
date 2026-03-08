@@ -4,9 +4,10 @@ import { useState } from 'react';
 import type { ChurchEvent, EventType } from '@/lib/eventData';
 
 const TYPE_ICONS: Record<EventType, string> = {
-  liturgy: 'fa-church',
-  feast:   'fa-star',
-  study:   'fa-book-open',
+  liturgy:    'fa-church',
+  feast:      'fa-star',
+  study:      'fa-book-open',
+  fellowship: 'fa-people-group',
 };
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];

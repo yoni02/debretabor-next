@@ -7,14 +7,16 @@ const MONTH_NAMES = ['January','February','March','April','May','June','July','A
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 const TYPE_COLORS: Record<EventType, string> = {
-  liturgy: 'event-liturgy',
-  feast:   'event-feast',
-  study:   'event-study',
+  liturgy:    'event-liturgy',
+  feast:      'event-feast',
+  study:      'event-study',
+  fellowship: 'event-fellowship',
 };
 const TYPE_ICONS: Record<EventType, string> = {
-  liturgy: 'fa-church',
-  feast:   'fa-star',
-  study:   'fa-book-open',
+  liturgy:    'fa-church',
+  feast:      'fa-star',
+  study:      'fa-book-open',
+  fellowship: 'fa-people-group',
 };
 
 function pad(n: number) { return String(n).padStart(2, '0'); }

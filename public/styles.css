@@ -1440,9 +1440,10 @@ header {
     pointer-events: none;
 }
 
-.event-page-card.event-liturgy .epc-accent { background: var(--eth-crimson); }
-.event-page-card.event-feast   .epc-accent { background: var(--eth-gold-rim); }
-.event-page-card.event-study   .epc-accent { background: var(--eth-lapis); }
+.event-page-card.event-liturgy    .epc-accent { background: var(--eth-crimson); }
+.event-page-card.event-feast      .epc-accent { background: var(--eth-gold-rim); }
+.event-page-card.event-study      .epc-accent { background: var(--eth-lapis); }
+.event-page-card.event-fellowship .epc-accent { background: var(--eth-malachite); }
 
 .epc-icon {
     width: 44px;
@@ -1462,9 +1463,10 @@ header {
         0 0 0 5px var(--eth-gold-rim);
 }
 
-.event-page-card.event-liturgy .epc-icon { background: var(--eth-crimson); }
-.event-page-card.event-feast   .epc-icon { background: var(--eth-ochre); }
-.event-page-card.event-study   .epc-icon { background: var(--eth-lapis); }
+.event-page-card.event-liturgy    .epc-icon { background: var(--eth-crimson); }
+.event-page-card.event-feast      .epc-icon { background: var(--eth-ochre); }
+.event-page-card.event-study      .epc-icon { background: var(--eth-lapis); }
+.event-page-card.event-fellowship .epc-icon { background: var(--eth-malachite); }
 
 .epc-body { flex: 1; }
 
@@ -1666,9 +1668,10 @@ header {
     display: inline-block;
 }
 
-.cal-dot.event-liturgy { background: var(--eth-crimson); }
-.cal-dot.event-feast   { background: var(--eth-gold-rim); }
-.cal-dot.event-study   { background: var(--eth-lapis); }
+.cal-dot.event-liturgy    { background: var(--eth-crimson); }
+.cal-dot.event-feast      { background: var(--eth-gold-rim); }
+.cal-dot.event-study      { background: var(--eth-lapis); }
+.cal-dot.event-fellowship { background: var(--eth-malachite); }
 
 /* Events panel */
 .events-panel {
@@ -1759,9 +1762,10 @@ header {
         0 0 0 4.5px var(--eth-gold-rim);
 }
 
-.event-item.event-liturgy .event-icon { background: var(--eth-crimson); }
-.event-item.event-feast   .event-icon { background: var(--eth-ochre); }
-.event-item.event-study   .event-icon { background: var(--eth-lapis); }
+.event-item.event-liturgy    .event-icon { background: var(--eth-crimson); }
+.event-item.event-feast      .event-icon { background: var(--eth-ochre); }
+.event-item.event-study      .event-icon { background: var(--eth-lapis); }
+.event-item.event-fellowship .event-icon { background: var(--eth-malachite); }
 
 .event-date-label {
     font-size: 0.7rem;

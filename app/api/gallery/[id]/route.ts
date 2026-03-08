@@ -1,10 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createSupabaseServer, createSupabaseAdmin } from '@/lib/supabase-server';
 
+async function requireSession() {
+  const supabase = createSupabaseServer();
+  const { data: { session } } = await supabase.auth.getSession();
+  return session;
+}
+
+export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+  if (!await requireSession()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const body = await req.json();
+  const { data, error } = await createSupabaseAdmin()
+    .from('gallery_photos').update(body).eq('id', params.id).select().single();
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json(data);
+}
+
 export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
-  const auth = createSupabaseServer();
-  const { data: { session } } = await auth.auth.getSession();
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!await requireSession()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const admin = createSupabaseAdmin();
 

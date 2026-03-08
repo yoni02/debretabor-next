@@ -1,4 +1,4 @@
-export type EventType = 'liturgy' | 'study' | 'feast';
+export type EventType = 'liturgy' | 'study' | 'feast' | 'fellowship';
 
 export interface ChurchEvent {
   _id?: string;

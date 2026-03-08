@@ -13,8 +13,8 @@ const STATIC_PHOTOS = [
   { src: '/screenshot-s5.png', caption: 'Sacred Procession', alt: 'Liturgical procession with priests carrying an icon' },
   { src: '/screenshot-s6.png', caption: 'Blessing Ceremony', alt: 'Clergy performing an outdoor blessing ceremony' },
   { src: '/screenshot-s3.png', caption: 'Choir & Deacons', alt: 'Deacons singing in white robes with ceremonial staffs' },
-  { src: '/Choir1.JPG', caption: 'Choir in Worship', alt: 'Church choir members gathered in worship' },
-  { src: '/Choir2.JPG', caption: 'Choir During Liturgy', alt: 'Choir singing during the Divine Liturgy' },
+  { src: '/Choir1.JPG', caption: 'Choir Group', alt: 'Church choir members gathered in worship' },
+  { src: '/Choir2.JPG', caption: 'Choir Group', alt: 'Choir singing during the Divine Liturgy' },
   { src: '/fellowship.png', caption: 'Fellowship After Liturgy', alt: 'Community gathering for fellowship after Sunday Liturgy' },
   { src: '/sundayschool.png', caption: 'Sunday School', alt: 'Sunday School students learning about the Orthodox faith' },
 ];
