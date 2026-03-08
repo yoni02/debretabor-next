@@ -21,28 +21,38 @@ interface Props {
   events: Omit<ChurchEvent, '_id'>[];
 }
 
+const FILTER_TYPES = ['all', 'feast', 'study', 'fellowship'] as const;
+type Filter = typeof FILTER_TYPES[number];
+
 export default function EventsPageClient({ events }: Props) {
-  const [filter, setFilter] = useState<EventType | 'all'>('all');
+  const [filter, setFilter] = useState<Filter>('all');
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date();
+  const todayStr  = today.toISOString().split('T')[0];
+  const in30Days  = new Date(today); in30Days.setDate(today.getDate() + 30);
+  const in30Str   = in30Days.toISOString().split('T')[0];
 
-  // For liturgy, only surface the single next upcoming service — not the whole year's worth
-  const nextLiturgyDate = events
-    .filter(e => e.type === 'liturgy' && e.date >= today)
-    .sort((a, b) => a.date.localeCompare(b.date))[0]?.date ?? null;
+  // Liturgy: only the very next upcoming Sunday service
+  const nextLiturgy = events
+    .filter(e => e.type === 'liturgy' && e.date >= todayStr)
+    .sort((a, b) => a.date.localeCompare(b.date))[0] ?? null;
 
-  const visible = events
-    .filter(e => {
-      if (e.type === 'liturgy') return e.date === nextLiturgyDate;
-      return e.date >= today;
-    })
-    .filter(e => filter === 'all' || e.type === filter)
+  // Non-liturgy: anything within the next 30 days
+  const specialEvents = events
+    .filter(e => e.type !== 'liturgy' && e.date >= todayStr && e.date <= in30Str)
     .sort((a, b) => a.date.localeCompare(b.date));
+
+  // Combine: next liturgy first, then upcoming specials filtered by tab
+  const liturgyRow  = nextLiturgy ? [nextLiturgy] : [];
+  const visible =
+    filter === 'all'
+      ? [...liturgyRow, ...specialEvents]
+      : specialEvents.filter(e => e.type === filter);
 
   return (
     <>
       <div className="events-filter-bar">
-        {(['all', 'liturgy', 'feast', 'study', 'fellowship'] as const).map(f => (
+        {FILTER_TYPES.map(f => (
           <button
             key={f}
             className={`events-filter-btn${filter === f ? ' is-active' : ''}`}
@@ -53,14 +63,13 @@ export default function EventsPageClient({ events }: Props) {
                 className="filter-dot"
                 style={{
                   background:
-                    f === 'liturgy'    ? 'var(--eth-crimson)'   :
                     f === 'feast'      ? 'var(--eth-gold-rim)'  :
                     f === 'study'      ? 'var(--eth-lapis)'     :
                     /* fellowship */     'var(--eth-malachite)',
                 }}
               />
             )}
-            {f === 'all' ? 'All' : f === 'liturgy' ? 'Liturgy' : f === 'feast' ? 'Feasts' : f === 'study' ? 'Bible Study' : 'Fellowship'}
+            {f === 'all' ? 'All' : f === 'feast' ? 'Feasts' : f === 'study' ? 'Bible Study' : 'Fellowship'}
           </button>
         ))}
       </div>

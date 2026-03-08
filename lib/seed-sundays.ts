@@ -16,32 +16,23 @@ export async function seedSundayLiturgies() {
   try {
     const db = createSupabaseAdmin();
     const today = new Date();
-    // Keep a 2-year rolling window of scheduled Sundays
     const end = new Date(today.getFullYear() + 2, 11, 31);
-    const allSundays = getSundays(today, end);
 
-    const { data: existing } = await db
-      .from('events')
-      .select('date')
-      .eq('title', 'Divine Liturgy')
-      .eq('type', 'liturgy');
+    // Clean slate: remove all existing liturgy events so there are no stale duplicates
+    await db.from('events').delete().eq('type', 'liturgy');
 
-    const existingDates = new Set((existing ?? []).map((e: { date: string }) => e.date));
+    // Re-insert a clean 2-year window at the correct time
+    const toInsert = getSundays(today, end).map(date => ({
+      title: 'Divine Liturgy',
+      date,
+      time: '7:00 AM',
+      type: 'liturgy',
+      description: 'Morning Chants at 6:30 AM, Divine Liturgy at 7:00 AM, followed by refreshments and fellowship.',
+    }));
 
-    const toInsert = allSundays
-      .filter(date => !existingDates.has(date))
-      .map(date => ({
-        title: 'Divine Liturgy',
-        date,
-        time: '7:00 AM',
-        type: 'liturgy',
-        description: 'Morning Chants at 6:30 AM, Divine Liturgy at 7:00 AM, followed by refreshments and fellowship.',
-      }));
-
-    if (toInsert.length > 0) {
-      await db.from('events').insert(toInsert);
-      console.log(`[seed-sundays] Scheduled ${toInsert.length} upcoming Sunday liturgies.`);
-    }
+    const { error } = await db.from('events').insert(toInsert);
+    if (error) throw error;
+    console.log(`[seed-sundays] Refreshed ${toInsert.length} Sunday liturgy events.`);
   } catch (err) {
     console.error('[seed-sundays] error:', err);
   }

@@ -129,8 +129,9 @@ export default function AdminEventsPage() {
   }
 
 
-  // Group filtered events by month
-  const filtered = events.filter(ev => filter === 'all' || ev.type === filter);
+  // Liturgy events are auto-managed — hide them from the admin list
+  const nonLiturgy = events.filter(ev => ev.type !== 'liturgy');
+  const filtered = nonLiturgy.filter(ev => filter === 'all' || ev.type === filter);
   const grouped: Record<string, ChurchEvent[]> = {};
   filtered.forEach(ev => {
     const key = ev.date ? ev.date.slice(0, 7) : 'Unknown';
@@ -144,7 +145,10 @@ export default function AdminEventsPage() {
         <div>
           <h1 style={{ fontSize: '1.7rem', color: '#b8860b', margin: 0 }}>Events &amp; Calendar</h1>
           <p style={{ color: '#6b5d4d', fontSize: '0.85rem', margin: '0.25rem 0 0' }}>
-            {events.length} total event{events.length !== 1 ? 's' : ''}
+            {nonLiturgy.length} special event{nonLiturgy.length !== 1 ? 's' : ''}
+            <span style={{ marginLeft: 8, padding: '0.15rem 0.6rem', borderRadius: 999, fontSize: '0.72rem', background: 'rgba(122,24,24,0.08)', color: '#7A1818', fontWeight: 600 }}>
+              ⛪ Sunday Divine Liturgy auto-scheduled
+            </span>
           </p>
         </div>
         <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -221,11 +225,11 @@ export default function AdminEventsPage() {
         </form>
       )}
 
-      {/* Filter tabs */}
+      {/* Filter tabs — liturgy hidden (auto-managed) */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-        {(['all', ...Object.keys(TYPE_META)] as (EventType | 'all')[]).map(t => {
+        {(['all', 'feast', 'study', 'fellowship'] as (EventType | 'all')[]).map(t => {
           const meta = t === 'all' ? null : TYPE_META[t as EventType];
-          const count = t === 'all' ? events.length : events.filter(e => e.type === t).length;
+          const count = t === 'all' ? nonLiturgy.length : nonLiturgy.filter(e => e.type === t).length;
           const active = filter === t;
           return (
             <button key={t} onClick={() => setFilter(t)} style={{
