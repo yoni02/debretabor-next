@@ -48,9 +48,22 @@ export default function CalendarClient({ events }: Props) {
   const firstDay = new Date(viewYear, viewMonth, 1).getDay();
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
 
-  const pool = activeDate
-    ? eventsOn(activeDate)
-    : events.filter(e => e.date >= todayStr).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 8);
+  const in30Days = new Date(today); in30Days.setDate(today.getDate() + 30);
+  const in30Str  = dateStr(in30Days.getFullYear(), in30Days.getMonth(), in30Days.getDate());
+
+  const nextLiturgyDate = events
+    .filter(e => e.type === 'liturgy' && e.date >= todayStr)
+    .sort((a, b) => a.date.localeCompare(b.date))[0]?.date ?? null;
+
+  const upcomingPool = [
+    // Only the single next Sunday liturgy
+    ...events.filter(e => e.type === 'liturgy' && e.date === nextLiturgyDate),
+    // All non-liturgy events within 30 days
+    ...events.filter(e => e.type !== 'liturgy' && e.date >= todayStr && e.date <= in30Str),
+  ].sort((a, b) => a.date.localeCompare(b.date));
+
+  // When a date is clicked show all events for that day; otherwise show curated upcoming
+  const pool = activeDate ? eventsOn(activeDate) : upcomingPool;
 
   return (
     <div className="engage-grid">
