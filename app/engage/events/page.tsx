@@ -1,16 +1,23 @@
 import type { Metadata } from 'next';
 import AnimationsInit from '@/components/AnimationsInit';
 import EventsPageClient from '@/components/EventsPageClient';
+import { createSupabaseAdmin } from '@/lib/supabase-server';
 import { SEED_EVENTS } from '@/lib/eventData';
 
 export const metadata: Metadata = { title: 'Upcoming Events' };
 
+// Revalidate every 60 seconds so admin-added events appear quickly
+export const revalidate = 60;
+
 async function getEvents() {
   try {
-    // In production, fetch from your API:
-    // const res = await fetch(`${process.env.NEXTAUTH_URL}/api/events`, { cache: 'no-store' });
-    // return res.json();
-    return SEED_EVENTS;
+    const { data, error } = await createSupabaseAdmin()
+      .from('events')
+      .select('*')
+      .order('date', { ascending: true });
+
+    if (error || !data || data.length === 0) return SEED_EVENTS;
+    return data.map(e => ({ ...e, _id: e.id }));
   } catch {
     return SEED_EVENTS;
   }

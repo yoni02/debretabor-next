@@ -26,7 +26,10 @@ export async function DELETE(_req: NextRequest, { params }: { params: { id: stri
 
   if (fetchErr || !photo) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-  await admin.storage.from('church-images').remove([photo.storage_path]);
+  // Only remove from storage if it was uploaded there (public-folder photos have no storage_path)
+  if (photo.storage_path) {
+    await admin.storage.from('church-images').remove([photo.storage_path]);
+  }
 
   const { error } = await admin.from('gallery_photos').delete().eq('id', params.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

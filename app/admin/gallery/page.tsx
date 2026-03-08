@@ -40,11 +40,28 @@ export default function AdminGalleryPage() {
   const dragIdx    = useRef<number | null>(null);
   const dragOver   = useRef<number | null>(null);
 
+  const [seeding, setSeeding] = useState(false);
+
   const fetchPhotos = useCallback(async () => {
     const res = await fetch('/api/gallery');
     const data: Photo[] = await res.json();
     setPhotos(data.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)));
   }, []);
+
+  async function seedDefaults() {
+    if (!confirm('This will add all default church photos to the database. Continue?')) return;
+    setSeeding(true); setMsg('');
+    try {
+      const res = await fetch('/api/admin/seed-gallery', { method: 'POST' });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Seed failed');
+      setMsg(json.inserted ? `✓ Added ${json.inserted} default photos.` : `ℹ ${json.message}`);
+      await fetchPhotos();
+    } catch (err) {
+      setMsg(`✗ ${err instanceof Error ? err.message : 'Seed failed'}`);
+    }
+    setSeeding(false);
+  }
 
   useEffect(() => { fetchPhotos(); }, [fetchPhotos]);
 
@@ -153,6 +170,17 @@ export default function AdminGalleryPage() {
               fontWeight: 700, border: 'none', cursor: 'pointer', fontSize: '0.85rem',
             }}>
               {savingOrder ? 'Saving…' : '↕ Save Order'}
+            </button>
+          )}
+          {photos.length === 0 && (
+            <button onClick={seedDefaults} disabled={seeding} title="Populate the database with all default church photos" style={{
+              padding: '0.6rem 1.4rem', borderRadius: 999,
+              background: 'rgba(26,52,120,0.1)', color: '#1A3478',
+              border: '1px solid rgba(26,52,120,0.35)',
+              fontWeight: 700, cursor: seeding ? 'not-allowed' : 'pointer', fontSize: '0.85rem',
+              opacity: seeding ? 0.7 : 1,
+            }}>
+              {seeding ? 'Initializing…' : '⬇ Initialize Default Photos'}
             </button>
           )}
           <button onClick={() => setShowUpload(v => !v)} style={{
