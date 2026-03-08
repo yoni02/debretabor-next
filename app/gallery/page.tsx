@@ -29,12 +29,18 @@ async function getPhotos() {
     const { data, error } = await createSupabaseAdmin()
       .from('gallery_photos')
       .select('public_url, caption, sort_order')
-      .order('sort_order', { ascending: true, nullsFirst: false })
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: true });
 
     if (error || !data || data.length === 0) return FALLBACK_PHOTOS;
 
-    return data.map(p => ({
+    // Sort by sort_order if present, otherwise keep created_at order
+    const sorted = [...data].sort((a, b) => {
+      const ao = a.sort_order ?? 9999;
+      const bo = b.sort_order ?? 9999;
+      return ao - bo;
+    });
+
+    return sorted.map(p => ({
       src: p.public_url as string,
       caption: (p.caption as string) ?? '',
       alt: (p.caption as string) || 'Church photo',

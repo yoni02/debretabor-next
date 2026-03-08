@@ -38,11 +38,22 @@ export async function POST() {
     return NextResponse.json({ message: `Already has ${count} photos — skipped seed.` });
   }
 
-  // Insert all default photos (storage_path is null for public-folder images)
-  const { data, error } = await admin
+  // Try inserting with sort_order first; if that column doesn't exist yet, retry without it
+  let insertResult = await admin
     .from('gallery_photos')
     .insert(DEFAULT_PHOTOS.map(p => ({ ...p, storage_path: null })))
     .select();
+
+  if (insertResult.error?.message?.includes('sort_order')) {
+    // sort_order column not added yet — insert without it
+    insertResult = await admin
+      .from('gallery_photos')
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .insert(DEFAULT_PHOTOS.map(({ sort_order: _so, ...p }) => ({ ...p, storage_path: null })))
+      .select();
+  }
+
+  const { data, error } = insertResult;
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
