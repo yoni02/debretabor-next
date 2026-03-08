@@ -108,12 +108,15 @@ export default function AdminEventsPage() {
       const res = await fetch(url, {
         method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form),
       });
-      if (!res.ok) throw new Error('Failed');
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || err.details || 'Unknown error');
+      }
       setMsg(editId ? '✓ Event updated.' : '✓ Event added.');
       cancelEdit();
       await fetchEvents();
-    } catch {
-      setMsg('✗ Error saving event.');
+    } catch (err) {
+      setMsg(`✗ ${err instanceof Error ? err.message : 'Error saving event'}`);
     }
     setLoading(false);
   }

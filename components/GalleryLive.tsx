@@ -28,27 +28,25 @@ export default function GalleryLive() {
   useEffect(() => {
     const supabase = createSupabaseBrowser();
 
+    // Fetch through the API route (service-role key) so RLS never blocks reads
     async function fetchPhotos() {
-      const { data, error } = await supabase
-        .from('gallery_photos')
-        .select('public_url, caption, sort_order, created_at')
-        .order('created_at', { ascending: true });
-
-      if (error || !data || data.length === 0) {
-        setPhotos(FALLBACK);
-      } else {
+      try {
+        const res = await fetch('/api/gallery', { cache: 'no-store' });
+        if (!res.ok) throw new Error('fetch failed');
+        const data: Array<{ public_url: string; caption: string; sort_order: number | null; created_at: string }> = await res.json();
+        if (!data || data.length === 0) { setPhotos(FALLBACK); setLoading(false); return; }
         const sorted = [...data].sort((a, b) => {
-          const ao = (a.sort_order as number | null) ?? 9999;
-          const bo = (b.sort_order as number | null) ?? 9999;
-          return ao !== bo
-            ? ao - bo
-            : ((a.created_at as string) ?? '').localeCompare((b.created_at as string) ?? '');
+          const ao = a.sort_order ?? 9999;
+          const bo = b.sort_order ?? 9999;
+          return ao !== bo ? ao - bo : (a.created_at ?? '').localeCompare(b.created_at ?? '');
         });
         setPhotos(sorted.map(p => ({
-          src: p.public_url as string,
-          caption: (p.caption as string) ?? '',
-          alt: (p.caption as string) || 'Church photo',
+          src: p.public_url,
+          caption: p.caption ?? '',
+          alt: p.caption || 'Church photo',
         })));
+      } catch {
+        setPhotos(FALLBACK);
       }
       setLoading(false);
     }

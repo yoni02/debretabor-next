@@ -33,7 +33,7 @@ export default function EventsPageClient({ events }: Props) {
   return (
     <>
       <div className="events-filter-bar">
-        {(['all', 'liturgy', 'feast', 'study'] as const).map(f => (
+        {(['all', 'liturgy', 'feast', 'study', 'fellowship'] as const).map(f => (
           <button
             key={f}
             className={`events-filter-btn${filter === f ? ' is-active' : ''}`}
@@ -42,10 +42,16 @@ export default function EventsPageClient({ events }: Props) {
             {f !== 'all' && (
               <span
                 className="filter-dot"
-                style={{ background: f === 'liturgy' ? 'var(--eth-crimson)' : f === 'feast' ? 'var(--eth-gold-rim)' : 'var(--eth-lapis)' }}
+                style={{
+                  background:
+                    f === 'liturgy'    ? 'var(--eth-crimson)'   :
+                    f === 'feast'      ? 'var(--eth-gold-rim)'  :
+                    f === 'study'      ? 'var(--eth-lapis)'     :
+                    /* fellowship */     'var(--eth-malachite)',
+                }}
               />
             )}
-            {f === 'all' ? 'All' : f === 'liturgy' ? 'Liturgy' : f === 'feast' ? 'Feasts' : 'Bible Study'}
+            {f === 'all' ? 'All' : f === 'liturgy' ? 'Liturgy' : f === 'feast' ? 'Feasts' : f === 'study' ? 'Bible Study' : 'Fellowship'}
           </button>
         ))}
       </div>

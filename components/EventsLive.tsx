@@ -12,23 +12,22 @@ export default function EventsLive() {
   useEffect(() => {
     const supabase = createSupabaseBrowser();
 
+    // Fetch through the API route (service-role key) so RLS never blocks reads
     async function fetchEvents() {
-      const { data, error } = await supabase
-        .from('events')
-        .select('*')
-        .order('date', { ascending: true });
-
-      if (error || !data || data.length === 0) {
+      try {
+        const res = await fetch('/api/events', { cache: 'no-store' });
+        if (!res.ok) throw new Error('fetch failed');
+        const data: ChurchEvent[] = await res.json();
+        setEvents(data.length > 0 ? data : SEED_EVENTS);
+      } catch {
         setEvents(SEED_EVENTS);
-      } else {
-        setEvents(data.map(e => ({ ...e, _id: e.id } as ChurchEvent)));
       }
       setLoading(false);
     }
 
     fetchEvents();
 
-    // Subscribe — any INSERT / UPDATE / DELETE on events instantly refreshes
+    // Real-time: re-fetch via API whenever the DB changes
     const channel = supabase
       .channel('events-live')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'events' }, () => fetchEvents())
