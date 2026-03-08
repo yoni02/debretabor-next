@@ -25,8 +25,17 @@ export default function EventsPageClient({ events }: Props) {
   const [filter, setFilter] = useState<EventType | 'all'>('all');
 
   const today = new Date().toISOString().split('T')[0];
+
+  // For liturgy, only surface the single next upcoming service — not the whole year's worth
+  const nextLiturgyDate = events
+    .filter(e => e.type === 'liturgy' && e.date >= today)
+    .sort((a, b) => a.date.localeCompare(b.date))[0]?.date ?? null;
+
   const visible = events
-    .filter(e => e.date >= today)
+    .filter(e => {
+      if (e.type === 'liturgy') return e.date === nextLiturgyDate;
+      return e.date >= today;
+    })
     .filter(e => filter === 'all' || e.type === filter)
     .sort((a, b) => a.date.localeCompare(b.date));
 
