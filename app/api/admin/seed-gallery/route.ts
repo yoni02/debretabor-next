@@ -39,9 +39,10 @@ export async function POST() {
   }
 
   // Try inserting with sort_order first; if that column doesn't exist yet, retry without it
+  // storage_path = '' signals a public-folder photo (no Supabase Storage entry to delete)
   let insertResult = await admin
     .from('gallery_photos')
-    .insert(DEFAULT_PHOTOS.map(p => ({ ...p, storage_path: null })))
+    .insert(DEFAULT_PHOTOS.map(p => ({ ...p, storage_path: '' })))
     .select();
 
   if (insertResult.error?.message?.includes('sort_order')) {
@@ -49,7 +50,7 @@ export async function POST() {
     insertResult = await admin
       .from('gallery_photos')
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .insert(DEFAULT_PHOTOS.map(({ sort_order: _so, ...p }) => ({ ...p, storage_path: null })))
+      .insert(DEFAULT_PHOTOS.map(({ sort_order: _so, ...p }) => ({ ...p, storage_path: '' })))
       .select();
   }
 

@@ -26,8 +26,9 @@ export async function DELETE(_req: NextRequest, { params }: { params: { id: stri
 
   if (fetchErr || !photo) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-  // Only remove from storage if it was uploaded there (public-folder photos have no storage_path)
-  if (photo.storage_path) {
+  // Only remove from Supabase Storage if there is a real storage path
+  // (public-folder photos use '' or null — nothing to delete from storage)
+  if (photo.storage_path && photo.storage_path !== '') {
     await admin.storage.from('church-images').remove([photo.storage_path]);
   }
 
