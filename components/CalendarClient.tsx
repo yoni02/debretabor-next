@@ -43,7 +43,22 @@ export default function CalendarClient({ events }: Props) {
   function prevMonth() { if (viewMonth === 0) { setViewYear(y => y - 1); setViewMonth(11); } else setViewMonth(m => m - 1); setActiveDate(null); }
   function nextMonth() { if (viewMonth === 11) { setViewYear(y => y + 1); setViewMonth(0); } else setViewMonth(m => m + 1); setActiveDate(null); }
 
-  function eventsOn(ds: string) { return events.filter(e => e.date === ds); }
+  function parseTime(t: string): number {
+    const m = t.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+    if (!m) return 0;
+    let h = parseInt(m[1], 10);
+    const min = parseInt(m[2], 10);
+    const isPM = m[3].toUpperCase() === 'PM';
+    if (isPM && h !== 12) h += 12;
+    if (!isPM && h === 12) h = 0;
+    return h * 60 + min;
+  }
+
+  function eventsOn(ds: string) {
+    return events
+      .filter(e => e.date === ds)
+      .sort((a, b) => parseTime(a.time) - parseTime(b.time));
+  }
 
   const firstDay = new Date(viewYear, viewMonth, 1).getDay();
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
