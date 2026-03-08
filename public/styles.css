@@ -312,6 +312,37 @@ header {
     background: rgba(201, 162, 39, 0.12);
 }
 
+/* Admin shortcut badge — only visible to logged-in admins */
+.nav-admin-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #130804;
+    background: linear-gradient(135deg, #c9a227, #b8860b);
+    border: none;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    box-shadow: 0 2px 8px rgba(184,134,11,0.25);
+}
+.nav-admin-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(184,134,11,0.35);
+    color: #130804;
+}
+
+.mobile-admin-badge {
+    margin-top: 0.5rem;
+    color: #b8860b !important;
+    font-weight: 700;
+    border-top: 1px solid rgba(184,168,138,0.3);
+    padding-top: 1rem !important;
+}
+
 .nav-link.has-dropdown::after {
     content: "";
     width: 0;

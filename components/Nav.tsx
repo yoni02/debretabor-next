@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { createSupabaseBrowser } from '@/lib/supabase-browser';
 
 const CHURCH_NAME = 'Debre Tabor Holy God Father';
 const CHURCH_SUBTITLE = 'Ethiopian Orthodox Tewahedo Church';
@@ -17,6 +18,15 @@ export default function Nav() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Check admin session and keep it in sync
+  useEffect(() => {
+    const supabase = createSupabaseBrowser();
+    supabase.auth.getSession().then(({ data: { session } }) => setIsAdmin(!!session));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => setIsAdmin(!!session));
+    return () => subscription.unsubscribe();
+  }, []);
 
   // Close menu on route change
   useEffect(() => {
@@ -102,6 +112,11 @@ export default function Nav() {
           <Link href="/services"  className={`nav-link${isActive(pathname, '/services')  ? ' nav-link--active' : ''}`}>Services</Link>
           <Link href="/contact"   className={`nav-link${isActive(pathname, '/contact')   ? ' nav-link--active' : ''}`}>Contact</Link>
           <Link href="/donations" className={`nav-link${isActive(pathname, '/donations') ? ' nav-link--active' : ''}`}>Donations</Link>
+          {isAdmin && (
+            <Link href="/admin" className="nav-admin-badge">
+              ⚙ Admin
+            </Link>
+          )}
         </div>
 
         {/* Mobile slide-down menu */}
@@ -173,6 +188,11 @@ export default function Nav() {
             <Link href="/services"  className="mobile-item mobile-item--top" onClick={() => setMenuOpen(false)}>Services</Link>
             <Link href="/contact"   className="mobile-item mobile-item--top" onClick={() => setMenuOpen(false)}>Contact</Link>
             <Link href="/donations" className="mobile-item mobile-item--top mobile-item--donate" onClick={() => setMenuOpen(false)}>Donations</Link>
+            {isAdmin && (
+              <Link href="/admin" className="mobile-item mobile-admin-badge" onClick={() => setMenuOpen(false)}>
+                ⚙ Admin Panel
+              </Link>
+            )}
           </div>
         )}
       </nav>
