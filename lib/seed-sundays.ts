@@ -1,12 +1,21 @@
 import { createSupabaseAdmin } from './supabase-server';
 
+function toLocalDateStr(d: Date): string {
+  // Use local date components — toISOString() converts to UTC and can shift the day
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
 function getSundays(start: Date, end: Date): string[] {
   const sundays: string[] = [];
   const d = new Date(start);
-  // Advance to the first Sunday on or after start
+  d.setHours(0, 0, 0, 0);
+  // Advance to the first Sunday on or after start (getDay() = 0 means Sunday)
   d.setDate(d.getDate() + ((7 - d.getDay()) % 7));
   while (d <= end) {
-    sundays.push(d.toISOString().split('T')[0]);
+    sundays.push(toLocalDateStr(d));
     d.setDate(d.getDate() + 7);
   }
   return sundays;
