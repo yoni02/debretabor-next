@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { createSupabaseBrowser } from '@/lib/supabase-browser';
-import { useRouter } from 'next/navigation';
 
 const CHURCH_NAME = 'Debre Tabor Holy God Father';
 const CHURCH_SUBTITLE = 'Ethiopian Orthodox Tewahedo Church';
@@ -17,17 +16,9 @@ function isActive(pathname: string, href: string) {
 
 export default function Nav() {
   const pathname = usePathname();
-  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-
-  function handleRefresh() {
-    setRefreshing(true);
-    router.refresh();
-    setTimeout(() => setRefreshing(false), 1200);
-  }
 
   // Check admin session and keep it in sync
   useEffect(() => {
@@ -122,17 +113,7 @@ export default function Nav() {
           <Link href="/contact"   className={`nav-link${isActive(pathname, '/contact')   ? ' nav-link--active' : ''}`}>Contact</Link>
           <Link href="/donations" className={`nav-link${isActive(pathname, '/donations') ? ' nav-link--active' : ''}`}>Donations</Link>
           {isAdmin && (
-            <>
-              <Link href="/admin" className="nav-admin-badge">⚙ Admin</Link>
-              <button
-                onClick={handleRefresh}
-                className="nav-refresh-btn"
-                title="Reload page data from server"
-                aria-label="Refresh page data"
-              >
-                <span style={{ display: 'inline-block', transition: 'transform 0.6s', transform: refreshing ? 'rotate(360deg)' : 'none' }}>↺</span>
-              </button>
-            </>
+            <Link href="/admin" className="nav-admin-badge">⚙ Admin</Link>
           )}
         </div>
 
@@ -206,17 +187,9 @@ export default function Nav() {
             <Link href="/contact"   className="mobile-item mobile-item--top" onClick={() => setMenuOpen(false)}>Contact</Link>
             <Link href="/donations" className="mobile-item mobile-item--top mobile-item--donate" onClick={() => setMenuOpen(false)}>Donations</Link>
             {isAdmin && (
-              <>
-                <Link href="/admin" className="mobile-item mobile-admin-badge" onClick={() => setMenuOpen(false)}>
-                  ⚙ Admin Panel
-                </Link>
-                <button
-                  onClick={() => { handleRefresh(); setMenuOpen(false); }}
-                  className="mobile-item mobile-refresh-btn"
-                >
-                  {refreshing ? 'Refreshing…' : '↺ Refresh Page Data'}
-                </button>
-              </>
+              <Link href="/admin" className="mobile-item mobile-admin-badge" onClick={() => setMenuOpen(false)}>
+                ⚙ Admin Panel
+              </Link>
             )}
           </div>
         )}

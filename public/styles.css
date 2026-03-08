@@ -343,43 +343,6 @@ header {
     padding-top: 1rem !important;
 }
 
-/* Desktop refresh button — shown next to Admin badge for logged-in admins */
-.nav-refresh-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(184,134,11,0.5);
-    background: rgba(184,134,11,0.08);
-    color: #b8860b;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    padding: 0;
-    line-height: 1;
-}
-.nav-refresh-btn:hover {
-    background: rgba(184,134,11,0.18);
-    border-color: #b8860b;
-    transform: rotate(30deg);
-}
-
-/* Mobile refresh button */
-.mobile-refresh-btn {
-    display: block;
-    width: 100%;
-    text-align: left;
-    background: transparent;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #b8860b;
-    cursor: pointer;
-    border-top: 1px dashed rgba(184,168,138,0.25);
-}
 
 .nav-link.has-dropdown::after {
     content: "";
