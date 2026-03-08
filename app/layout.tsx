@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import Nav from '@/components/Nav';
-import Footer from '@/components/Footer';
+import SiteShell from '@/components/SiteShell';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -24,18 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        {/* Global watermark background — visible on every page */}
-        <div className="transfiguration-bg" aria-hidden="true">
-          <div className="transfiguration-bg-img"></div>
-          <div className="transfiguration-bg-overlay"></div>
-        </div>
-        <div className="page">
-          <div className="shell">
-            <Nav />
-            <main>{children}</main>
-          </div>
-          <Footer />
-        </div>
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   );
