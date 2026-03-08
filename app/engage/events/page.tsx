@@ -6,8 +6,8 @@ import { SEED_EVENTS } from '@/lib/eventData';
 
 export const metadata: Metadata = { title: 'Upcoming Events' };
 
-// Revalidate every 60 seconds so admin-added events appear quickly
-export const revalidate = 60;
+// Always fetch fresh from Supabase so admin changes appear immediately
+export const dynamic = 'force-dynamic';
 
 async function getEvents() {
   try {

@@ -13,12 +13,13 @@ const NAV_LINKS = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const path = usePathname();
+  const isLoginPage = path === '/admin/login';
 
   return (
     <div style={{ minHeight: '100vh', background: '#f0ebe0', display: 'flex', flexDirection: 'column' }}>
 
-      {/* Top nav bar */}
-      <nav style={{
+      {/* Top nav bar — hidden on the login page */}
+      {!isLoginPage && <nav style={{
         background: '#130804',
         padding: '0 1.5rem',
         display: 'flex',
@@ -69,7 +70,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Link>
           <AdminSignOut />
         </div>
-      </nav>
+      </nav>}
 
       {/* Page content */}
       <main style={{ flex: 1, maxWidth: 1100, width: '100%', margin: '0 auto', padding: '2rem 1.5rem' }}>

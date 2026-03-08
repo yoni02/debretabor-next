@@ -5,8 +5,8 @@ import { createSupabaseAdmin } from '@/lib/supabase-server';
 
 export const metadata: Metadata = { title: 'Photo Gallery' };
 
-// Re-fetch from Supabase every 60 seconds so admin changes appear quickly
-export const revalidate = 60;
+// Always fetch fresh from Supabase so admin changes appear immediately
+export const dynamic = 'force-dynamic';
 
 // Shown only if the DB has no photos (before admin initializes)
 const FALLBACK_PHOTOS = [
