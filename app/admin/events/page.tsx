@@ -5,6 +5,57 @@ import type { ChurchEvent, EventType } from '@/lib/eventData';
 
 const EMPTY: Omit<ChurchEvent, '_id'> = { title: '', date: '', time: '6:00 AM', type: 'liturgy', description: '' };
 
+const HOURS   = Array.from({ length: 12 }, (_, i) => String(i + 1));
+const MINUTES = ['00', '15', '30', '45'];
+
+function parseTime(val: string) {
+  const m = val.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (m) return { hour: m[1], minute: m[2], period: m[3].toUpperCase() as 'AM' | 'PM' };
+  return { hour: '6', minute: '00', period: 'AM' as const };
+}
+
+function TimeInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const parsed = parseTime(value);
+  const [hour,   setHour]   = useState(parsed.hour);
+  const [minute, setMinute] = useState(parsed.minute);
+  const [period, setPeriod] = useState<'AM' | 'PM'>(parsed.period);
+
+  useEffect(() => {
+    const p = parseTime(value);
+    setHour(p.hour); setMinute(p.minute); setPeriod(p.period);
+  }, [value]);
+
+  function emit(h: string, m: string, p: string) { onChange(`${h}:${m} ${p}`); }
+
+  const sel: React.CSSProperties = {
+    padding: '0.65rem 0.5rem', borderRadius: 10, border: '1px solid rgba(184,168,138,0.5)',
+    background: '#faf8f5', fontSize: '0.9rem', color: '#3d3529', cursor: 'pointer',
+    appearance: 'none', textAlign: 'center', fontWeight: 600,
+  };
+
+  return (
+    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+      {/* Hour */}
+      <select style={{ ...sel, width: 70 }} value={hour}
+        onChange={e => { setHour(e.target.value); emit(e.target.value, minute, period); }}>
+        {HOURS.map(h => <option key={h} value={h}>{h}</option>)}
+      </select>
+      <span style={{ color: '#6b5d4d', fontWeight: 700, fontSize: '1.1rem' }}>:</span>
+      {/* Minute */}
+      <select style={{ ...sel, width: 70 }} value={minute}
+        onChange={e => { setMinute(e.target.value); emit(hour, e.target.value, period); }}>
+        {MINUTES.map(m => <option key={m} value={m}>{m}</option>)}
+      </select>
+      {/* AM / PM */}
+      <select style={{ ...sel, width: 70 }} value={period}
+        onChange={e => { const p = e.target.value as 'AM' | 'PM'; setPeriod(p); emit(hour, minute, p); }}>
+        <option value="AM">AM</option>
+        <option value="PM">PM</option>
+      </select>
+    </div>
+  );
+}
+
 const TYPE_META: Record<EventType, { label: string; color: string; bg: string }> = {
   liturgy:    { label: 'Liturgy',    color: '#7A1818', bg: 'rgba(122,24,24,0.1)' },
   feast:      { label: 'Feast',      color: '#b8860b', bg: 'rgba(184,134,11,0.1)' },
@@ -140,7 +191,7 @@ export default function AdminEventsPage() {
           </div>
           <div>
             <label style={LABEL}>Time</label>
-            <input style={I()} value={form.time} onChange={e => setForm(f => ({ ...f, time: e.target.value }))} placeholder="6:00 AM" required />
+            <TimeInput value={form.time} onChange={t => setForm(f => ({ ...f, time: t }))} />
           </div>
           <div style={{ gridColumn: '1/-1' }}>
             <label style={LABEL}>Description</label>
