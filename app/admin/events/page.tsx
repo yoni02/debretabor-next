@@ -141,7 +141,7 @@ export default function AdminEventsPage() {
   return (
     <div>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.75rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+      <div className="admin-header-row">
         <div>
           <h1 style={{ fontSize: '1.7rem', color: '#b8860b', margin: 0 }}>Events &amp; Calendar</h1>
           <p style={{ color: '#6b5d4d', fontSize: '0.85rem', margin: '0.25rem 0 0' }}>
@@ -151,7 +151,7 @@ export default function AdminEventsPage() {
             </span>
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div className="admin-header-buttons">
           {msg && <span style={{ fontSize: '0.85rem', color: msg.startsWith('Error') ? '#7A1818' : '#2d6a2d', fontWeight: 600 }}>{msg}</span>}
           <button onClick={() => { setShowForm(v => !v); if (showForm) cancelEdit(); }} style={{
             padding: '0.6rem 1.4rem', borderRadius: 999,
@@ -170,8 +170,7 @@ export default function AdminEventsPage() {
         <form onSubmit={handleSubmit} style={{
           background: '#fff', border: '1px solid rgba(184,168,138,0.35)', borderRadius: 20,
           padding: '1.75rem', marginBottom: '2rem', boxShadow: '0 2px 12px rgba(61,53,41,0.07)',
-          display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem',
-        }}>
+        }} className="admin-form-grid">
           <h2 style={{ gridColumn: '1/-1', fontSize: '1rem', color: '#b8860b', margin: 0, paddingBottom: '0.5rem', borderBottom: '1px solid rgba(184,168,138,0.25)' }}>
             <i className="fas fa-pen" style={{ marginRight: 6 }} />{editId ? 'Edit Event' : 'New Event'}
           </h2>
@@ -265,30 +264,24 @@ export default function AdminEventsPage() {
                   const meta = TYPE_META[ev.type as EventType] ?? TYPE_META.liturgy;
                   const dateStr = ev.date ? new Date(ev.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : '';
                   return (
-                    <div key={ev._id} style={{
+                    <div key={ev._id} className="admin-event-card" style={{
                       background: '#fff', border: '1px solid rgba(184,168,138,0.3)', borderRadius: 14,
-                      padding: '0.9rem 1.1rem', display: 'flex', alignItems: 'center', gap: '0.85rem',
+                      padding: '0.9rem 1.1rem',
                       boxShadow: '0 1px 6px rgba(61,53,41,0.05)',
                     }}>
-                      {/* Type dot */}
                       <div style={{ width: 12, height: 12, borderRadius: '50%', background: meta.color, flexShrink: 0 }} />
-
-                      {/* Event info */}
-                      <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="admin-event-info">
                         <div style={{ fontWeight: 700, color: '#3d3529', fontSize: '0.92rem' }}>{ev.title}</div>
                         <div style={{ fontSize: '0.78rem', color: '#6b5d4d', marginTop: '0.1rem' }}>
                           {dateStr} · {ev.time}
                           {ev.description && <span style={{ marginLeft: '0.5rem', opacity: 0.75 }}>— {ev.description.slice(0, 70)}{ev.description.length > 70 ? '…' : ''}</span>}
                         </div>
                       </div>
-
-                      {/* Type badge */}
                       <span style={{
                         fontSize: '0.7rem', padding: '0.15rem 0.55rem', borderRadius: 999,
                         background: meta.bg, color: meta.color, fontWeight: 700, flexShrink: 0,
                       }}>{meta.label}</span>
-
-                      {/* Actions */}
+                      <div className="admin-event-actions">
                       <button onClick={() => startEdit(ev)} style={{
                         padding: '0.35rem 0.9rem', borderRadius: 8, background: 'rgba(200,148,26,0.1)',
                         border: '1px solid rgba(184,134,11,0.3)', color: '#b8860b', cursor: 'pointer',
@@ -299,6 +292,7 @@ export default function AdminEventsPage() {
                         border: '1px solid rgba(122,24,24,0.2)', color: '#7A1818', cursor: 'pointer',
                         fontSize: '0.78rem', fontWeight: 600, flexShrink: 0,
                       }}>Delete</button>
+                      </div>
                     </div>
                   );
                 })}

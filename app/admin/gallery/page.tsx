@@ -158,14 +158,14 @@ export default function AdminGalleryPage() {
   return (
     <div>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.75rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+      <div className="admin-header-row">
         <div>
           <h1 style={{ fontSize: '1.7rem', color: '#b8860b', margin: 0 }}>Gallery Manager</h1>
           <p style={{ color: '#6b5d4d', fontSize: '0.85rem', margin: '0.25rem 0 0' }}>
             {photos.length} photo{photos.length !== 1 ? 's' : ''} · Drag to reorder · Click caption to edit
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+        <div className="admin-header-buttons">
           {msg && (
             <span style={{ fontSize: '0.85rem', color: msg.startsWith('Error') ? '#7A1818' : '#2d6a2d', fontWeight: 600 }}>{msg}</span>
           )}
@@ -206,8 +206,7 @@ export default function AdminGalleryPage() {
         <form onSubmit={handleUpload} style={{
           background: '#fff', border: '1px solid rgba(184,168,138,0.35)', borderRadius: 20,
           padding: '1.75rem', marginBottom: '2rem', boxShadow: '0 2px 12px rgba(61,53,41,0.07)',
-          display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem',
-        }}>
+        }} className="admin-form-grid">
           <h2 style={{ gridColumn: '1 / -1', fontSize: '1rem', color: '#b8860b', margin: 0, paddingBottom: '0.25rem', borderBottom: '1px solid rgba(184,168,138,0.25)' }}>
             Upload New Photo
           </h2>
@@ -245,7 +244,7 @@ export default function AdminGalleryPage() {
           <p style={{ fontStyle: 'italic' }}>No photos yet. Click &ldquo;Upload Photo&rdquo; to add your first image.</p>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+        <div className="admin-gallery-grid">
           {photos.map((photo, idx) => (
             <div
               key={photo.id}
