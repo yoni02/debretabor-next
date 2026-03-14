@@ -153,7 +153,7 @@ export default function CalendarClient({ events }: Props) {
               <div className="event-body">
                 <div className="event-date-label">{formatDate(ev.date)}</div>
                 <div className="event-name">{ev.title}</div>
-                <div className="event-time"><i className="fas fa-clock" /> {ev.time}</div>
+                <div className="event-time"><i className="fas fa-clock" /> {ev.end_time ? `${ev.time} – ${ev.end_time}` : ev.time}</div>
                 {ev.description && <div className="event-desc">{ev.description}</div>}
               </div>
             </li>

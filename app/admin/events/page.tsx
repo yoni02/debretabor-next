@@ -5,6 +5,14 @@ import type { ChurchEvent, EventType } from '@/lib/eventData';
 
 const EMPTY: Omit<ChurchEvent, '_id'> = { title: '', date: '', time: '9:00 AM', type: 'fellowship', description: '' };
 
+type RepeatFrequency = 'daily' | 'weekly' | 'biweekly' | 'monthly';
+
+interface RepeatOptions {
+  enabled: boolean;
+  frequency: RepeatFrequency;
+  until: string;
+}
+
 const HOURS   = Array.from({ length: 12 }, (_, i) => String(i + 1));
 const MINUTES = ['00', '15', '30', '45'];
 
@@ -81,6 +89,9 @@ export default function AdminEventsPage() {
   const [msg,     setMsg]     = useState('');
   const [filter,  setFilter]  = useState<EventType | 'all'>('all');
   const [showForm, setShowForm] = useState(false);
+  const [repeat, setRepeat] = useState<RepeatOptions>({ enabled: false, frequency: 'weekly', until: '' });
+  const [endTime, setEndTime] = useState('');
+  const [allDay, setAllDay] = useState(false);
 
   async function fetchEvents() {
     const res = await fetch('/api/events');
@@ -91,28 +102,38 @@ export default function AdminEventsPage() {
   function startEdit(ev: ChurchEvent) {
     setEditId(ev._id ?? null);
     setForm({ title: ev.title, date: ev.date, time: ev.time, type: ev.type, description: ev.description });
+    setRepeat({ enabled: false, frequency: 'weekly', until: '' });
+    setEndTime('');
+    setAllDay(false);
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function cancelEdit() {
-    setEditId(null); setForm(EMPTY); setShowForm(false);
+    setEditId(null); setForm(EMPTY); setRepeat({ enabled: false, frequency: 'weekly', until: '' }); setEndTime(''); setAllDay(false); setShowForm(false);
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true); setMsg('');
     try {
+      const payload = {
+        ...form,
+        time: allDay ? 'All day' : form.time,
+        end_time: endTime || undefined,
+        repeat: repeat.enabled ? { frequency: repeat.frequency, until: repeat.until } : undefined,
+      };
       const url    = editId ? `/api/events/${editId}` : '/api/events';
       const method = editId ? 'PUT' : 'POST';
       const res = await fetch(url, {
-        method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form),
+        method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.error || err.details || 'Unknown error');
       }
-      setMsg(editId ? 'Event updated.' : 'Event added.');
+      const data = await res.json();
+      setMsg(editId ? 'Event updated.' : (data.created_count ? `${data.created_count} events added.` : 'Event added.'));
       cancelEdit();
       await fetchEvents();
     } catch (err) {
@@ -198,8 +219,50 @@ export default function AdminEventsPage() {
           </div>
           <div>
             <label style={LABEL}>Time</label>
-            <TimeInput value={form.time} onChange={t => setForm(f => ({ ...f, time: t }))} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#6b5d4d', cursor: 'pointer' }}>
+                <input type="checkbox" checked={allDay} onChange={e => setAllDay(e.target.checked)} />
+                All day
+              </label>
+              {!allDay && (
+                <>
+                  <TimeInput value={form.time} onChange={t => setForm(f => ({ ...f, time: t }))} />
+                  <div>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem', fontSize: '0.75rem', color: '#6b5d4d', cursor: 'pointer' }}>
+                      <input type="checkbox" checked={!!endTime} onChange={e => { if (e.target.checked) setEndTime(endTime || form.time || '10:00 PM'); else setEndTime(''); }} />
+                      Set end time
+                    </label>
+                    {endTime && <TimeInput value={endTime} onChange={setEndTime} />}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
+          {!editId && (
+            <div style={{ gridColumn: '1/-1', padding: '1rem', background: 'rgba(26,52,120,0.06)', borderRadius: 12, border: '1px solid rgba(26,52,120,0.15)' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', fontWeight: 600, color: '#1A3478', cursor: 'pointer', marginBottom: repeat.enabled ? '0.75rem' : 0 }}>
+                <input type="checkbox" checked={repeat.enabled} onChange={e => setRepeat(r => ({ ...r, enabled: e.target.checked }))} />
+                Repeat event until a date
+              </label>
+              {repeat.enabled && (
+                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+                  <div>
+                    <label style={LABEL}>Frequency</label>
+                    <select style={I()} value={repeat.frequency} onChange={e => setRepeat(r => ({ ...r, frequency: e.target.value as RepeatFrequency }))}>
+                      <option value="daily">Daily</option>
+                      <option value="weekly">Weekly</option>
+                      <option value="biweekly">Bi-weekly</option>
+                      <option value="monthly">Monthly</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={LABEL}>Repeat until</label>
+                    <input type="date" style={I()} value={repeat.until} onChange={e => setRepeat(r => ({ ...r, until: e.target.value }))} required={repeat.enabled} />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
           <div style={{ gridColumn: '1/-1' }}>
             <label style={LABEL}>Description</label>
             <textarea style={{ ...I(), minHeight: 80, resize: 'vertical' }} value={form.description}

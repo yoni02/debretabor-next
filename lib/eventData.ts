@@ -7,6 +7,7 @@ export interface ChurchEvent {
   time: string;
   type: EventType;
   description: string;
+  end_time?: string;
 }
 
 export const SEED_EVENTS: Omit<ChurchEvent, '_id'>[] = [
