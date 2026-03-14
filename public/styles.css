@@ -608,9 +608,20 @@ header {
     color: var(--eth-crimson);
 }
 
-@media (max-width: 600px) {
+/* Phone: show 4 cards in 2x2 grid */
+@media (max-width: 768px) {
     .quick-cards {
         grid-template-columns: repeat(2, 1fr);
+    }
+    .quick-card:nth-child(n+5) {
+        display: none;
+    }
+}
+
+/* Desktop: show all 8 cards in 4-column grid */
+@media (min-width: 769px) {
+    .quick-card:nth-child(n+5) {
+        display: flex;
     }
 }
 
@@ -884,6 +895,27 @@ header {
 }
 
 .timeline-link:hover .timeline-content p i {
+    transform: translateX(4px);
+}
+
+.timeline-learn-more {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent-strong);
+}
+
+.timeline-learn-more i {
+    margin-left: 0.35rem;
+    transition: transform var(--transition-fast);
+}
+
+.timeline-link:hover .timeline-learn-more {
+    color: var(--accent-strong);
+}
+
+.timeline-link:hover .timeline-learn-more i {
     transform: translateX(4px);
 }
 
@@ -1661,6 +1693,14 @@ header {
 
 .cal-day--empty { opacity: 0; pointer-events: none; }
 
+.cal-day--clickable {
+    cursor: pointer;
+}
+
+.cal-day--clickable:not(.cal-day--has-events):hover {
+    background: rgba(61, 53, 41, 0.06);
+}
+
 .cal-day--today .cal-day-num {
     background: var(--eth-ink);
     color: var(--eth-gold-rim);
@@ -1836,6 +1876,20 @@ header {
     font-size: 0.9rem;
 }
 
+.event-empty--no-events {
+    font-style: normal;
+}
+
+.event-empty--no-events p {
+    margin: 0 0 0.5rem;
+}
+
+.event-empty--no-events p:last-child {
+    margin-bottom: 0;
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
 @media (max-width: 720px) {
     .engage-grid {
         grid-template-columns: 1fr;
@@ -1990,6 +2044,132 @@ header {
 
 .gallery-item {
     cursor: zoom-in;
+}
+
+/* Gallery folders */
+.gallery-folders-section {
+    margin-bottom: 3rem;
+}
+
+.gallery-folders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.gallery-folder-card {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background: rgba(255, 252, 248, 0.95);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all var(--transition-med);
+    text-align: left;
+    padding: 0;
+}
+
+.gallery-folder-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(61, 53, 41, 0.12);
+    border-color: rgba(184, 134, 11, 0.4);
+}
+
+.gallery-folder-thumb {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: rgba(184, 168, 138, 0.2);
+}
+
+.gallery-folder-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--eth-gold-rim);
+    font-size: 2.5rem;
+    opacity: 0.6;
+}
+
+.gallery-folder-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(transparent 40%, rgba(19, 8, 4, 0.6) 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 0.5rem;
+    color: var(--eth-ivory);
+    font-size: 1.2rem;
+    opacity: 0;
+    transition: opacity var(--transition-med);
+}
+
+.gallery-folder-card:hover .gallery-folder-overlay {
+    opacity: 1;
+}
+
+.gallery-folder-title {
+    padding: 0.75rem 1rem 0.25rem;
+    font-weight: 600;
+    color: var(--accent-strong);
+    font-size: 1rem;
+}
+
+.gallery-folder-count {
+    padding: 0 1rem 0.9rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.gallery-photos-section {
+    margin-bottom: 3rem;
+}
+
+.gallery-photos-header {
+    margin-bottom: 1.5rem;
+}
+
+.gallery-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    margin-bottom: 0.75rem;
+    background: none;
+    border: none;
+    color: var(--accent-strong);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.gallery-back-btn:hover {
+    color: var(--eth-crimson);
+}
+
+.gallery-photos-title {
+    font-size: 1.5rem;
+    color: var(--accent-strong);
+    margin: 0;
+}
+
+.gallery-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-muted);
+}
+
+.gallery-empty i {
+    font-size: 3rem;
+    color: var(--eth-gold-rim);
+    opacity: 0.6;
+    display: block;
+    margin-bottom: 1rem;
 }
 
 /* Lightbox */

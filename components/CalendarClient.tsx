@@ -107,8 +107,8 @@ export default function CalendarClient({ events }: Props) {
             return (
               <div
                 key={ds}
-                className={`cal-day${isToday ? ' cal-day--today' : ''}${hasEvents ? ' cal-day--has-events' : ''}${isActive ? ' cal-day--active' : ''}`}
-                onClick={() => hasEvents && setActiveDate(isActive ? null : ds)}
+                className={`cal-day cal-day--clickable${isToday ? ' cal-day--today' : ''}${hasEvents ? ' cal-day--has-events' : ''}${isActive ? ' cal-day--active' : ''}`}
+                onClick={() => setActiveDate(isActive ? null : ds)}
               >
                 <span className="cal-day-num">{d}</span>
                 {hasEvents && (
@@ -138,7 +138,13 @@ export default function CalendarClient({ events }: Props) {
           )}
         </div>
         <ul className="events-list">
-          {pool.length === 0 && <li className="event-empty">No events on this date.</li>}
+          {pool.length === 0 && activeDate && (
+            <li className="event-empty event-empty--no-events">
+              <p>There are no upcoming events on this date.</p>
+              <p>Click on a day with a dot to see events.</p>
+            </li>
+          )}
+          {pool.length === 0 && !activeDate && <li className="event-empty">No upcoming events.</li>}
           {pool.map((ev, i) => (
             <li key={i} className={`event-item ${TYPE_COLORS[ev.type]}`}>
               <div className={`event-icon`}>

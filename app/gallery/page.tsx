@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import AnimationsInit from '@/components/AnimationsInit';
-import GalleryLive from '@/components/GalleryLive';
+import GalleryWithFolders from '@/components/GalleryWithFolders';
 
 export const metadata: Metadata = { title: 'Photo Gallery' };
 
@@ -12,7 +12,7 @@ export default function GalleryPage() {
         <h1>Photo Gallery</h1>
         <p>Moments from our church community</p>
       </div>
-      <GalleryLive />
+      <GalleryWithFolders />
     </>
   );
 }

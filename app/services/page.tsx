@@ -17,35 +17,43 @@ export default function ServicesPage() {
         <h2 className="timeline-title">Sunday Schedule</h2>
         <div className="timeline">
           <div className="timeline-item">
-            <div className="timeline-icon"><i className="fas fa-music"></i></div>
-            <div className="timeline-content"><h3>Morning Chants</h3><p>5:30 AM</p></div>
+            <div className="timeline-icon"><i className="fas fa-hands-praying"></i></div>
+            <div className="timeline-content"><h3>Covenant Prayer</h3><p>6:30 AM – 7:30 AM</p></div>
           </div>
           <div className="timeline-item">
             <div className="timeline-icon"><i className="fas fa-church"></i></div>
-            <div className="timeline-content"><h3>Divine Liturgy</h3><p>6:00 AM</p></div>
+            <div className="timeline-content"><h3>Divine Liturgy</h3><p>7:00 AM – 9:30 AM</p></div>
           </div>
           <div className="timeline-item">
             <div className="timeline-icon"><i className="fas fa-coffee"></i></div>
-            <div className="timeline-content"><h3>Refreshments</h3><p>After Liturgy</p></div>
+            <div className="timeline-content"><h3>Refreshments</h3><p>Right after Divine Liturgy</p></div>
           </div>
-          <Link href="/ministries" className="timeline-item timeline-link">
-            <div className="timeline-icon"><i className="fas fa-users"></i></div>
+          <Link href="/ministries/sunday-school" className="timeline-item timeline-link">
+            <div className="timeline-icon"><i className="fas fa-book-open"></i></div>
             <div className="timeline-content">
-              <h3>Sunday School / Choir</h3>
-              <p>Learn More <i className="fas fa-arrow-right"></i></p>
+              <h3>Sunday School</h3>
+              <p>Various sessions depending on age group, between 9:30 AM and 1:00 PM</p>
+              <span className="timeline-learn-more">Learn more <i className="fas fa-arrow-right"></i></span>
             </div>
           </Link>
         </div>
       </section>
 
       <section className="other-services">
-        <h2 className="section-title">Other Services</h2>
+        <h2 className="section-title">Other Programs</h2>
         <div className="schedule-list">
+          <div className="schedule-item">
+            <div className="schedule-icon"><i className="fas fa-hands-praying"></i></div>
+            <div>
+              <div className="schedule-day">Every Saturday</div>
+              <div className="schedule-time">Covenant Prayer — 6:30 AM to 7:30 AM</div>
+            </div>
+          </div>
           <div className="schedule-item">
             <div className="schedule-icon"><i className="fas fa-book-open"></i></div>
             <div>
-              <div className="schedule-day">Every Other Friday</div>
-              <div className="schedule-time">Bible Study</div>
+              <div className="schedule-day">Every other Friday</div>
+              <div className="schedule-time">Bible Study (check our calender for more details)</div>
             </div>
           </div>
           <div className="schedule-item">

@@ -37,8 +37,8 @@ export default function ContactPage() {
         </div>
         <div className="contact-card">
           <h3><i className="fas fa-clock"></i> Sunday Service</h3>
-          <p>Morning Chants — 5:30 AM</p>
-          <p>Divine Liturgy — 6:00 AM</p>
+          <p>Covenant Prayer — 6:30 AM</p>
+          <p>Divine Liturgy — 7:00 AM – 9:30 AM</p>
         </div>
       </div>
 

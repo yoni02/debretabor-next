@@ -1,9 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createSupabaseServer, createSupabaseAdmin } from '@/lib/supabase-server';
 
-export async function GET() {
-  const { data, error } = await createSupabaseAdmin()
-    .from('gallery_photos').select('*').order('created_at', { ascending: true });
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const folderId = searchParams.get('folder_id');
+
+  let query = createSupabaseAdmin()
+    .from('gallery_photos')
+    .select('*')
+    .order('sort_order', { ascending: true })
+    .order('created_at', { ascending: true });
+
+  if (folderId) {
+    query = query.eq('folder_id', folderId);
+  }
+
+  const { data, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
 }
@@ -17,6 +29,7 @@ export async function POST(req: NextRequest) {
   const file    = formData.get('file') as File;
   const caption = (formData.get('caption') as string) || '';
   const section = (formData.get('section') as string) || 'gallery';
+  const folderId = (formData.get('folder_id') as string) || null;
 
   if (!file) return NextResponse.json({ error: 'No file provided' }, { status: 400 });
 
@@ -37,7 +50,13 @@ export async function POST(req: NextRequest) {
 
   const { data, error } = await admin
     .from('gallery_photos')
-    .insert({ storage_path: path, public_url: urlData.publicUrl, caption, section })
+    .insert({
+      storage_path: path,
+      public_url: urlData.publicUrl,
+      caption,
+      section,
+      folder_id: folderId || null,
+    })
     .select().single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

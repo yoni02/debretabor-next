@@ -36,7 +36,7 @@ export async function seedSundayLiturgies() {
       date,
       time: '7:00 AM',
       type: 'liturgy',
-      description: 'Morning Chants at 6:30 AM, Divine Liturgy at 7:00 AM, followed by refreshments and fellowship.',
+      description: 'Covenant Prayer at 6:30 AM, Divine Liturgy at 7:00 AM–9:30 AM, followed by refreshments and fellowship.',
     }));
 
     const { error } = await db.from('events').insert(toInsert);

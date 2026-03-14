@@ -29,15 +29,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Quick Links */}
+      {/* Quick Links — first 4 shown on phone (Services, Contact, About, Donate) */}
       <div className="quick-cards">
         <Link href="/services" className="quick-card">
           <i className="fas fa-church"></i>
           <span>Services</span>
         </Link>
+        <Link href="/contact" className="quick-card">
+          <i className="fas fa-location-dot"></i>
+          <span>Contact</span>
+        </Link>
         <Link href="/about" className="quick-card">
           <i className="fas fa-landmark"></i>
           <span>About</span>
+        </Link>
+        <Link href="/donations" className="quick-card">
+          <i className="fas fa-heart"></i>
+          <span>Donate</span>
         </Link>
         <Link href="/sacraments" className="quick-card">
           <i className="fas fa-cross"></i>
@@ -54,14 +62,6 @@ export default function HomePage() {
         <Link href="/faq" className="quick-card">
           <i className="fas fa-circle-question"></i>
           <span>FAQ</span>
-        </Link>
-        <Link href="/contact" className="quick-card">
-          <i className="fas fa-location-dot"></i>
-          <span>Contact</span>
-        </Link>
-        <Link href="/donations" className="quick-card">
-          <i className="fas fa-heart"></i>
-          <span>Donate</span>
         </Link>
       </div>
 
@@ -119,31 +119,32 @@ export default function HomePage() {
         <h2 className="timeline-title">Sunday Schedule</h2>
         <div className="timeline">
           <div className="timeline-item">
-            <div className="timeline-icon"><i className="fas fa-music"></i></div>
+            <div className="timeline-icon"><i className="fas fa-hands-praying"></i></div>
             <div className="timeline-content">
-              <h3>Morning Chants</h3>
-              <p>5:30 AM</p>
+              <h3>Covenant Prayer</h3>
+              <p>6:30 AM – 7:30 AM</p>
             </div>
           </div>
           <div className="timeline-item">
             <div className="timeline-icon"><i className="fas fa-church"></i></div>
             <div className="timeline-content">
               <h3>Divine Liturgy</h3>
-              <p>6:00 AM</p>
+              <p>7:00 AM – 9:30 AM</p>
             </div>
           </div>
           <div className="timeline-item">
             <div className="timeline-icon"><i className="fas fa-coffee"></i></div>
             <div className="timeline-content">
               <h3>Refreshments</h3>
-              <p>After Liturgy</p>
+              <p>Right after Divine Liturgy</p>
             </div>
           </div>
-          <Link href="/ministries" className="timeline-item timeline-link">
-            <div className="timeline-icon"><i className="fas fa-users"></i></div>
+          <Link href="/ministries/sunday-school" className="timeline-item timeline-link">
+            <div className="timeline-icon"><i className="fas fa-book-open"></i></div>
             <div className="timeline-content">
-              <h3>Sunday School / Choir</h3>
-              <p>Learn More <i className="fas fa-arrow-right"></i></p>
+              <h3>Sunday School</h3>
+              <p>Various sessions depending on age group, between 9:30 AM and 1:00 PM</p>
+              <span className="timeline-learn-more">Learn more <i className="fas fa-arrow-right"></i></span>
             </div>
           </Link>
         </div>

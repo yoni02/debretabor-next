@@ -8,8 +8,17 @@ interface Photo {
   public_url: string;
   caption: string;
   section: string;
+  folder_id?: string | null;
   sort_order?: number;
   created_at?: string;
+}
+
+interface Folder {
+  id: string;
+  title: string;
+  thumbnail_url: string | null;
+  photo_count: number;
+  sort_order: number;
 }
 
 const I = (style: React.CSSProperties = {}): React.CSSProperties => ({
@@ -36,6 +45,12 @@ export default function AdminGalleryPage() {
   const [editCaptionId, setEditCaptionId] = useState<string | null>(null);
   const [editCaptionVal, setEditCaptionVal] = useState('');
   const [showUpload, setShowUpload] = useState(false);
+  const [folderId, setFolderId] = useState<string>('');
+  const [folders, setFolders] = useState<Folder[]>([]);
+  const [showFolders, setShowFolders] = useState(false);
+  const [folderTitle, setFolderTitle] = useState('');
+  const [editingFolderId, setEditingFolderId] = useState<string | null>(null);
+  const [editingFolderTitle, setEditingFolderTitle] = useState('');
 
   const fileRef    = useRef<HTMLInputElement>(null);
   const dragIdx    = useRef<number | null>(null);
@@ -46,12 +61,23 @@ export default function AdminGalleryPage() {
   const fetchPhotos = useCallback(async () => {
     const res = await fetch('/api/gallery');
     const data: Photo[] = await res.json();
-    // Match public site: sort_order asc (nulls last), then created_at asc
     setPhotos(data.sort((a, b) => {
       const ao = a.sort_order ?? 9999;
       const bo = b.sort_order ?? 9999;
       return ao !== bo ? ao - bo : (a.created_at ?? '').localeCompare(b.created_at ?? '');
     }));
+  }, []);
+
+  const fetchFolders = useCallback(async () => {
+    try {
+      const res = await fetch('/api/gallery/folders');
+      if (res.ok) {
+        const data = await res.json();
+        setFolders(data);
+      }
+    } catch {
+      setFolders([]);
+    }
   }, []);
 
   async function seedDefaults() {
@@ -69,7 +95,7 @@ export default function AdminGalleryPage() {
     setSeeding(false);
   }
 
-  useEffect(() => { fetchPhotos(); }, [fetchPhotos]);
+  useEffect(() => { fetchPhotos(); fetchFolders(); }, [fetchPhotos, fetchFolders]);
 
   // ── Upload ──────────────────────────────────────────────────────────────
   async function handleUpload(e: React.FormEvent) {
@@ -82,10 +108,11 @@ export default function AdminGalleryPage() {
       fd.append('file', file);
       fd.append('caption', caption);
       fd.append('section', section);
+      if (folderId) fd.append('folder_id', folderId);
       const res = await fetch('/api/gallery', { method: 'POST', body: fd });
       if (!res.ok) throw new Error(await res.text());
       setMsg('Photo uploaded.');
-      setCaption(''); setSection('gallery');
+      setCaption(''); setSection('gallery'); setFolderId('');
       if (fileRef.current) fileRef.current.value = '';
       setShowUpload(false);
       await fetchPhotos();
@@ -102,6 +129,7 @@ export default function AdminGalleryPage() {
     if (!res.ok) { setMsg('Error: Delete failed.'); return; }
     setMsg('Photo deleted.');
     await fetchPhotos();
+    await fetchFolders();
     setOrderDirty(false);
   }
 
@@ -116,6 +144,72 @@ export default function AdminGalleryPage() {
     setEditCaptionId(null);
     setMsg('Caption saved.');
     await fetchPhotos();
+    await fetchFolders();
+  }
+
+  async function savePhotoFolder(photoId: string, newFolderId: string | null) {
+    const res = await fetch(`/api/gallery/${photoId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ folder_id: newFolderId || null }),
+    });
+    if (!res.ok) { setMsg('Error: Save failed.'); return; }
+    setMsg('Folder updated.');
+    await fetchPhotos();
+    await fetchFolders();
+  }
+
+  async function createFolder(e: React.FormEvent) {
+    e.preventDefault();
+    if (!folderTitle.trim()) return;
+    setMsg('');
+    try {
+      const res = await fetch('/api/gallery/folders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: folderTitle.trim(), sort_order: folders.length }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error || 'Failed');
+      setFolderTitle('');
+      setShowFolders(false);
+      setMsg('Folder created.');
+      await fetchFolders();
+    } catch (err) {
+      setMsg(`Error: ${err instanceof Error ? err.message : 'Create failed'}`);
+    }
+  }
+
+  async function updateFolder(id: string) {
+    if (!editingFolderTitle.trim()) return;
+    setMsg('');
+    try {
+      const res = await fetch(`/api/gallery/folders/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: editingFolderTitle.trim() }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error || 'Failed');
+      setEditingFolderId(null);
+      setEditingFolderTitle('');
+      setMsg('Folder updated.');
+      await fetchFolders();
+    } catch (err) {
+      setMsg(`Error: ${err instanceof Error ? err.message : 'Update failed'}`);
+    }
+  }
+
+  async function deleteFolder(id: string) {
+    if (!confirm('Delete this folder? Photos will become uncategorized.')) return;
+    setMsg('');
+    try {
+      const res = await fetch(`/api/gallery/folders/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed');
+      setMsg('Folder deleted.');
+      await fetchPhotos();
+      await fetchFolders();
+    } catch {
+      setMsg('Error: Delete failed.');
+    }
   }
 
   // ── Drag to reorder ──────────────────────────────────────────────────────
@@ -189,6 +283,15 @@ export default function AdminGalleryPage() {
               <i className="fas fa-download" style={{ marginRight: 6 }} />{seeding ? 'Initializing…' : 'Initialize Default Photos'}
             </button>
           )}
+          <button onClick={() => setShowFolders(v => !v)} style={{
+            padding: '0.6rem 1.4rem', borderRadius: 999,
+            background: showFolders ? 'rgba(26,52,120,0.2)' : 'rgba(26,52,120,0.1)',
+            color: '#1A3478',
+            border: '1px solid rgba(26,52,120,0.35)',
+            fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem',
+          }}>
+            <i className={`fas ${showFolders ? 'fa-times' : 'fa-folder'}`} style={{ marginRight: 4 }} />{showFolders ? 'Close' : 'Manage Folders'}
+          </button>
           <button onClick={() => setShowUpload(v => !v)} style={{
             padding: '0.6rem 1.4rem', borderRadius: 999,
             background: showUpload ? 'rgba(184,168,138,0.2)' : '#130804',
@@ -200,6 +303,47 @@ export default function AdminGalleryPage() {
           </button>
         </div>
       </div>
+
+      {/* Folder management */}
+      {showFolders && (
+        <div style={{
+          background: '#fff', border: '1px solid rgba(184,168,138,0.35)', borderRadius: 20,
+          padding: '1.75rem', marginBottom: '2rem', boxShadow: '0 2px 12px rgba(61,53,41,0.07)',
+        }}>
+          <h2 style={{ fontSize: '1rem', color: '#b8860b', margin: '0 0 1rem', paddingBottom: '0.5rem', borderBottom: '1px solid rgba(184,168,138,0.25)' }}>
+            Gallery Folders
+          </h2>
+          <form onSubmit={createFolder} style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+            <input style={I({ flex: '1 1 200px', minWidth: 0 })} value={folderTitle} onChange={e => setFolderTitle(e.target.value)} placeholder="New folder title…" />
+            <button type="submit" disabled={!folderTitle.trim()} style={{
+              padding: '0.5rem 1.2rem', borderRadius: 999, background: '#1A3478', color: '#fff',
+              fontWeight: 700, border: 'none', cursor: folderTitle.trim() ? 'pointer' : 'not-allowed',
+              fontSize: '0.85rem', opacity: folderTitle.trim() ? 1 : 0.6,
+            }}><i className="fas fa-plus" style={{ marginRight: 4 }} />Create Folder</button>
+          </form>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {folders.map(f => (
+              <div key={f.id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 0.8rem', background: 'rgba(184,168,138,0.08)', borderRadius: 10 }}>
+                {editingFolderId === f.id ? (
+                  <>
+                    <input style={I({ flex: 1, padding: '0.4rem 0.6rem', fontSize: '0.85rem' })} value={editingFolderTitle} onChange={e => setEditingFolderTitle(e.target.value)} autoFocus />
+                    <button onClick={() => updateFolder(f.id)} style={{ padding: '0.3rem 0.6rem', borderRadius: 8, background: '#b8860b', color: '#fff', border: 'none', cursor: 'pointer', fontSize: '0.75rem' }}><i className="fas fa-check" /></button>
+                    <button onClick={() => { setEditingFolderId(null); setEditingFolderTitle(''); }} style={{ padding: '0.3rem 0.5rem', borderRadius: 8, background: 'rgba(184,168,138,0.2)', border: '1px solid rgba(184,168,138,0.4)', cursor: 'pointer', fontSize: '0.75rem' }}><i className="fas fa-times" /></button>
+                  </>
+                ) : (
+                  <>
+                    <span style={{ flex: 1, fontWeight: 600, color: '#3d3529' }}>{f.title}</span>
+                    <span style={{ fontSize: '0.8rem', color: '#6b5d4d' }}>{f.photo_count} photo{f.photo_count !== 1 ? 's' : ''}</span>
+                    <button onClick={() => { setEditingFolderId(f.id); setEditingFolderTitle(f.title); }} style={{ padding: '0.25rem 0.5rem', borderRadius: 6, background: 'none', border: '1px solid rgba(184,168,138,0.4)', cursor: 'pointer', fontSize: '0.75rem', color: '#6b5d4d' }} title="Edit"><i className="fas fa-pen" /></button>
+                    <button onClick={() => deleteFolder(f.id)} style={{ padding: '0.25rem 0.5rem', borderRadius: 6, background: 'rgba(122,24,24,0.08)', border: '1px solid rgba(122,24,24,0.2)', cursor: 'pointer', fontSize: '0.75rem', color: '#7A1818' }} title="Delete"><i className="fas fa-trash" /></button>
+                  </>
+                )}
+              </div>
+            ))}
+            {folders.length === 0 && <p style={{ color: '#6b5d4d', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>No folders yet. Create one to organize photos by category or event.</p>}
+          </div>
+        </div>
+      )}
 
       {/* Upload form */}
       {showUpload && (
@@ -222,6 +366,13 @@ export default function AdminGalleryPage() {
             <label style={LABEL}>Section</label>
             <select style={I()} value={section} onChange={e => setSection(e.target.value)}>
               {SECTIONS.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)} Page</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={LABEL}>Folder</label>
+            <select style={I()} value={folderId} onChange={e => setFolderId(e.target.value)}>
+              <option value="">No folder</option>
+              {folders.map(f => <option key={f.id} value={f.id}>{f.title}</option>)}
             </select>
           </div>
           <div style={{ gridColumn: '1 / -1' }}>
@@ -318,13 +469,23 @@ export default function AdminGalleryPage() {
                   </button>
                 )}
 
-                {/* Section badge + delete */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.4rem' }}>
-                  <span style={{
-                    fontSize: '0.7rem', padding: '0.15rem 0.5rem', borderRadius: 999,
-                    background: 'rgba(200,148,26,0.12)', color: '#b8860b', fontWeight: 600,
-                    textTransform: 'capitalize',
-                  }}>{photo.section}</span>
+                {/* Folder + Section + delete */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.4rem', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+                    <select
+                      value={photo.folder_id ?? ''}
+                      onChange={e => savePhotoFolder(photo.id, e.target.value || null)}
+                      style={{ fontSize: '0.7rem', padding: '0.15rem 0.4rem', borderRadius: 6, border: '1px solid rgba(184,168,138,0.4)', background: '#faf8f5', color: '#3d3529', cursor: 'pointer', maxWidth: 120 }}
+                    >
+                      <option value="">No folder</option>
+                      {folders.map(f => <option key={f.id} value={f.id}>{f.title}</option>)}
+                    </select>
+                    <span style={{
+                      fontSize: '0.7rem', padding: '0.15rem 0.5rem', borderRadius: 999,
+                      background: 'rgba(200,148,26,0.12)', color: '#b8860b', fontWeight: 600,
+                      textTransform: 'capitalize',
+                    }}>{photo.section}</span>
+                  </div>
                   <button onClick={() => handleDelete(photo.id)} style={{
                     padding: '0.3rem 0.7rem', borderRadius: 8, fontSize: '0.75rem',
                     background: 'rgba(122,24,24,0.08)', border: '1px solid rgba(122,24,24,0.2)',
