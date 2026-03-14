@@ -28,7 +28,6 @@ export default function GalleryWithFolders() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [useFallback, setUseFallback] = useState(false);
 
   const fetchFolders = useCallback(async () => {
     try {
@@ -75,13 +74,10 @@ export default function GalleryWithFolders() {
     setFolders(foldersData);
     if (photosData.length > 0) {
       setPhotos(photosData);
-      setUseFallback(false);
-    } else if (selectedFolderId === null) {
+    } else if (folderIdForFetch === null) {
       setPhotos(FALLBACK_PHOTOS);
-      setUseFallback(true);
     } else {
       setPhotos([]);
-      setUseFallback(false);
     }
     setLoading(false);
   }, [fetchFolders, fetchPhotos, selectedFolderId]);
@@ -108,8 +104,7 @@ export default function GalleryWithFolders() {
     const folderIdForFetch = selectedFolderId === '__all__' ? null : selectedFolderId;
     fetchPhotos(folderIdForFetch).then((p) => {
       if (!cancelled) {
-        setPhotos(p.length > 0 ? p : []);
-        setUseFallback(p.length === 0 && folderIdForFetch === null);
+        setPhotos(p.length > 0 ? p : folderIdForFetch === null ? FALLBACK_PHOTOS : []);
       }
       setLoading(false);
     });
